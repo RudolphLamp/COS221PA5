@@ -32,12 +32,13 @@ create table user_contact_details
 -- user address
 create table user_address
 (
-    user_id INT,
-    address_line VARCHAR(100),
-    city VARCHAR(50),
-    province VARCHAR(50),
-    postal_code VARCHAR(20),
-    FOREIGN KEY (user_id) REFERENCES user(user_id)
+    user_id int,
+    street_number varchar(4),
+    street_name varchar(60),
+    city varchar(50),
+    province varchar(50),
+    postal_code varchar(20),
+    foreign key (user_id) REFERENCES user(user_id)
 
 );
 
