@@ -25,20 +25,32 @@ create table user_contact_details
     constraint user_phone_number unique (Phone_number), -- no repeats
     constraint phone_number_format check (Phone_number like '___-___-____'), -- format phone number 012-345-6789
     
-    constraint user_email unique LOWER(Email_Address),
+    constraint user_email unique LOWER(Email_Address), -- lowercase letters in email
     CONSTRAINT email_format CHECK (Email_Address LIKE '%@%.%') -- format email someaddress@something.com
 );
 
 -- user address
 create table user_address
 (
-    user_id int,
+    User_ID int,
     street_number varchar(4),
     street_name varchar(60),
     city varchar(50),
     province varchar(50),
     postal_code varchar(20),
-    foreign key (user_id) REFERENCES user(user_id)
+    foreign key (User_ID) REFERENCES user(User_ID)
 
+);
+
+-- update from here
+create table profile
+(
+	Profile_ID int auto_increment primary key,
+    Profile_Name varchar(50),
+    Age int, -- derive from dob
+    User_ID int,
+    Profile_language varchar(50),
+    
+    foreign key (User_ID) REFERENCES user(User_ID)
 );
 
