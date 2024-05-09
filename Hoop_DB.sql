@@ -3,10 +3,10 @@
 -- drop Hoop_DB
 
 
--- table with simple user data,complex and composite get their own tables
+-- table with simple user data,complex/composite get their own tables
 create table user
 (
-	User_ID int auto_increment primary key,
+    User_ID int auto_increment primary key,
     First_Name varchar(50)not null,
     Last_Name varchar(60) not null,
     Date_of_Birth date not null,
@@ -16,7 +16,7 @@ create table user
 -- user contact details
 create table user_contact_details
 (
-	User_ID int,
+    User_ID int,
     Phone_number varchar(12),
     Email_Address varchar(130),
     foreign key (User_ID) references user(User_ID),
@@ -25,8 +25,8 @@ create table user_contact_details
     constraint user_phone_number unique (Phone_number), -- no repeats
     constraint phone_number_format check (Phone_number like '___-___-____'), -- format phone number 012-345-6789
     
-    constraint user_email unique LOWER(Email_Address), -- lowercase letters in email
-    CONSTRAINT email_format CHECK (Email_Address LIKE '%@%.%') -- format email someaddress@something.com
+    constraint user_email unique lower(Email_Address), -- lowercase letters in email
+    constraint email_format check (Email_Address like '%@%.%') -- format email someaddress@something.com
 );
 
 -- user address
@@ -38,19 +38,19 @@ create table user_address
     city varchar(50),
     province varchar(50),
     postal_code varchar(20),
-    foreign key (User_ID) REFERENCES user(User_ID)
+    foreign key (User_ID) references user(User_ID)
 
 );
 
 -- update from here
 create table profile
 (
-	Profile_ID int auto_increment primary key,
+    Profile_ID int auto_increment primary key,
     Profile_Name varchar(50),
     Age int, -- derive from dob
     User_ID int,
     Profile_language varchar(50),
     
-    foreign key (User_ID) REFERENCES user(User_ID)
+    foreign key (User_ID) references user(User_ID)
 );
 
