@@ -54,4 +54,54 @@ create table profile
     foreign key (User_ID) references user(User_ID)
 );
 
+create table Title
+(
+	Title_ID int auto_increment primary key,
+    Content_Rating varchar(10),
+    Review_Rating varchar(5), 
+    Release_Date date
+);
+
+create table Series
+(
+	Series_Name varchar(100),
+    First_Episode date, -- would year make more sense?
+    Last_Episode date,
+    Series_ID int primary key,
+    
+    foreign key (Series_ID) references Title(Title_ID)
+);
+
+
+create table Season
+(
+	-- link to series and title
+    Season_ID int auto_increment primary key,  
+    Season_Name varchar(100),
+    Series_ID int,  
+    
+    foreign key (Series_ID) references Series(Series_ID)
+);
+
+create table Episode
+(
+	-- link to season and title
+    Episode_ID int auto_increment primary key,
+    Episode_Name varchar(100),
+    Duration time,
+    
+    Season_ID int,  
+    
+    foreign key (Season_ID) references Season(Season_ID)
+);
+
+create table Movie
+(
+	Movie_Name varchar(100),
+    Duration time,
+    Movie_ID int primary key,
+    
+    foreign key (Movie_ID) references Title(Title_ID)
+);
+
 -- update from here
