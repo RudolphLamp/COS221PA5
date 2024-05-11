@@ -139,8 +139,6 @@ create table Subtitles_For
 	
 );
 
-
-
 -- production company table
 create table Production_Company
 (
@@ -204,7 +202,7 @@ create table Stars_In
 
 
 
-
+-- cast table
 create table Cast
 (
 	Actor_ID int auto_increment primary key,
@@ -216,6 +214,7 @@ create table Cast
 	
 );
 
+-- director table
 create table Director
 (
 	Director_ID int auto_increment primary key,
@@ -227,7 +226,7 @@ create table Director
 	
 );
 
-
+-- directed_by table 
 create table Directored_By
 (
 	Director_ID int auto_increment primary key,
@@ -242,6 +241,7 @@ create table Directored_By
 	
 );
 
+-- genre table
 create table Genre
 (
 	Genre_ID int auto_increment primary key,
@@ -250,16 +250,6 @@ create table Genre
 	--check relationship
 	
 );
-
--- create table title
--- (
--- 	Genra_ID int auto_increment primary key,
--- 	Genra_Name varchar(20) not null
-
--- 	--check relationship
-	
--- );
-
 
 
 
