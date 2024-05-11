@@ -41,6 +41,7 @@ create table Title
     Release_Date date,
     Profile_ID int,
     Title_Name varchar(100),
+    Plot_Summary varchar(1000),
     
     foreign key (Profile_ID) references profile(Profile_ID)
     
