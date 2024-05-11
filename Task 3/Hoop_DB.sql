@@ -108,23 +108,63 @@ create table Movie
 -- update from here
 
 -- language table
-create table language
+create table Language
 (
 	Language_ID int auto_increment primary key,
 	Language_Name varchar(20) not null
 	
 );
 
+-- dubbed_for language table
+create table Dubbed_For
+(
+	Language_ID int auto_increment primary key,
+	Title_ID int auto_increment
+
+	foreign key (Language_ID) references Language(Language_ID),
+	foreign key (Title_ID) references Title(Title_ID)
+	
+	
+);
+
+-- subtitles_for language table
+create table Subtitles_For
+(
+	Language_ID int auto_increment primary key,
+	Title_ID int auto_increment
+
+	foreign key (Language_ID) references Language(Language_ID),
+	foreign key (Title_ID) references Title(Title_ID)
+	
+	
+);
+
+
+
 -- production company table
-create table production_company
+create table Production_Company
 (
 	Company_ID int auto_increment primary key,
 	Company_Name varchar(20) not null
 	
 );
 
+-- produced table
+create table Produced
+(
+	Company_ID int auto_increment primary key,
+	Title_ID int auto_increment
+
+	foreign key (Company_ID) references Production_Company(Company_ID),
+	foreign key (Title_ID) references Title(Title_ID)
+	
+	
+);
+
+
+
 -- crew table
-create table crew
+create table Crew
 (
 	Crew_ID int auto_increment primary key,
 	First_Name varchar(20) not null,
@@ -134,7 +174,38 @@ create table crew
 	
 );
 
-create table cast
+-- worked_on table
+create table Worked_On
+(
+	Crew_ID int auto_increment primary key,
+	Title_ID int auto_increment,
+	Role varchar(30)
+
+	foreign key (Crew_ID) references Crew(Crew_ID),
+	foreign key (Title_ID) references Title(Title_ID)
+
+	--check relationship
+	
+);
+
+--stars_in table
+create table Stars_In
+(
+	Actor_ID int auto_increment primary key,
+	Title_ID int auto_increment,
+	Role varchar(30)
+
+	foreign key (Actor_ID) references Cast(Actor_ID),
+	foreign key (Title_ID) references Title(Title_ID)
+
+	--check relationship
+	
+);
+
+
+
+
+create table Cast
 (
 	Actor_ID int auto_increment primary key,
 	First_Name varchar(20) not null,
@@ -145,7 +216,7 @@ create table cast
 	
 );
 
-create table director
+create table Director
 (
 	Director_ID int auto_increment primary key,
 	First_Name varchar(20) not null,
@@ -156,9 +227,24 @@ create table director
 	
 );
 
-create table genre
+
+create table Directored_By
 (
-	Genra_ID int auto_increment primary key,
+	Director_ID int auto_increment primary key,
+	Title_ID int auto_increment
+
+	foreign key (Director_ID) references Director(Director_ID),
+	foreign key (Title_ID) references Title(Title_ID)
+	
+
+	--check relationship
+	
+	
+);
+
+create table Genre
+(
+	Genre_ID int auto_increment primary key,
 	Genra_Name varchar(20) not null
 
 	--check relationship
