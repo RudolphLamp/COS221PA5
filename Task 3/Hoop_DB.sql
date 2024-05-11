@@ -4,7 +4,7 @@
 
 
 -- table with simple user data,complex and composite get their own tables
-create table user
+create table User_Account
 (
 	User_ID int auto_increment primary key,
     First_Name varchar(50)not null,
@@ -20,7 +20,7 @@ create table user
 
 
 -- profile table
-create table profile
+create table profile_account
 (
 	Profile_ID int auto_increment primary key,
     Profile_Name varchar(50)NOT NULL,
@@ -28,7 +28,7 @@ create table profile
     User_ID int,
     Child_Profile boolean,
     
-    foreign key (User_ID) references user(User_ID)
+    foreign key (User_ID) references user_account(User_ID)
 );
 
 -- update from here
@@ -43,7 +43,7 @@ create table Title
     Title_Name varchar(100),
     Plot_Summary varchar(1000),
     
-    foreign key (Profile_ID) references profile(Profile_ID)
+    foreign key (Profile_ID) references profile_account(Profile_ID)
     
 );
 
@@ -100,11 +100,9 @@ create table Review
     
     
     -- foreign keys
-     foreign key (Profile_ID) references profile(Profile_ID),
+     foreign key (Profile_ID) references profile_account(Profile_ID),
      foreign key (Title_ID) references Title(Title_ID)
 );
-
-
 
 -- UPDATE FROM HERE
 
