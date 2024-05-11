@@ -106,3 +106,76 @@ create table Movie
     foreign key (Title_ID) references Title(Title_ID)
 );
 -- update from here
+
+-- language table
+create table language
+(
+	Language_ID int auto_increment primary key,
+	Language_Name varchar(20) not null
+	
+);
+
+-- production company table
+create table production_company
+(
+	Company_ID int auto_increment primary key,
+	Company_Name varchar(20) not null
+	
+);
+
+-- crew table
+create table crew
+(
+	Crew_ID int auto_increment primary key,
+	First_Name varchar(20) not null,
+	Last_Name varchar(20) not null
+
+	--check relationship
+	
+);
+
+create table cast
+(
+	Actor_ID int auto_increment primary key,
+	First_Name varchar(20) not null,
+	Last_Name varchar(20) not null
+
+	--check relationship
+	
+	
+);
+
+create table director
+(
+	Director_ID int auto_increment primary key,
+	First_Name varchar(20) not null,
+	Last_Name varchar(20) not null
+
+	--check relationship
+	
+	
+);
+
+create table genre
+(
+	Genra_ID int auto_increment primary key,
+	Genra_Name varchar(20) not null
+
+	--check relationship
+	
+);
+
+-- create table title
+-- (
+-- 	Genra_ID int auto_increment primary key,
+-- 	Genra_Name varchar(20) not null
+
+-- 	--check relationship
+	
+-- );
+
+
+
+
+
+
