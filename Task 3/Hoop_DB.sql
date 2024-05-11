@@ -90,6 +90,21 @@ create table Movie
     foreign key (Title_ID) references Title(Title_ID)
 );
 
+create table Review
+(
+	Rating varchar(10),
+    Review_Content varchar(250),
+    Title_ID int,
+    Profile_ID int,
+    
+    
+    -- foreign keys
+     foreign key (Profile_ID) references profile(Profile_ID),
+     foreign key (Title_ID) references Title(Title_ID)
+);
+
+
+
 -- UPDATE FROM HERE
 
 -- language table
