@@ -10,62 +10,46 @@ create table user
     First_Name varchar(50)not null,
     Last_Name varchar(60) not null,
     Date_of_Birth date not null,
-    user_password varchar(100)not null
-);
-
--- user contact details
-create table user_contact_details
-(
-	User_ID int,
-    Phone_number varchar(12),
-    Email_Address varchar(130),
-    foreign key (User_ID) references user(User_ID),
-    
-    -- constraints
-    constraint user_phone_number unique (Phone_number), -- no repeats
-    constraint phone_number_format check (Phone_number like '___-___-____'), -- format phone number 012-345-6789
-    
-    constraint user_email unique lower(Email_Address), -- lowercase 
+    user_password varchar(100)not null,
+    Admin_privileges boolean,
+     Email_Address varchar(130),
+      constraint user_email unique lower(Email_Address), -- lowercase 
     constraint email_format check (Email_Address like '%@%.%') -- format email someaddress@something.com
 );
 
--- user address
-create table user_address
-(
-    User_ID int,
-    street_number varchar(4),
-    street_name varchar(60),
-    city varchar(50),
-    province varchar(50),
-    postal_code varchar(20),
-    foreign key (User_ID) references user(User_ID)
 
-);
 
 -- profile table
 create table profile
 (
 	Profile_ID int auto_increment primary key,
-    Profile_Name varchar(50),
-    Age int, -- derive from dob
+    Profile_Name varchar(50)NOT NULL,
+    
     User_ID int,
-    Profile_language varchar(50),
+    Child_Profile boolean,
     
     foreign key (User_ID) references user(User_ID)
 );
+
+-- update from here
 
 create table Title
 (
 	Title_ID int auto_increment primary key,
     Content_Rating varchar(10),
     Review_Rating varchar(5), 
-    Release_Date date
+    Release_Date date,
+    Profile_ID int,
+    Title_Name varchar(100),
+    
+    foreign key (Profile_ID) references profile(Profile_ID)
+    
 );
 
 create table Series
 (
     Title_ID int,
-	Series_Name varchar(100),
+	
     First_Episode date, -- would year make more sense?
     Last_Episode date,
     
@@ -99,13 +83,14 @@ create table Episode
 
 create table Movie
 (
-	Movie_Name varchar(100),
+	
     Duration time,
     Title_ID int,
     
     foreign key (Title_ID) references Title(Title_ID)
 );
--- update from here
+
+-- UPDATE FROM HERE
 
 -- language table
 create table Language
