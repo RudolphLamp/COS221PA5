@@ -64,12 +64,13 @@ create table Title
 
 create table Series
 (
+    Title_ID int,
 	Series_Name varchar(100),
     First_Episode date, -- would year make more sense?
     Last_Episode date,
-    Series_ID int primary key,
     
-    foreign key (Series_ID) references Title(Title_ID)
+    
+    foreign key (Title_ID) references Title(Title_ID)
 );
 
 
@@ -78,9 +79,10 @@ create table Season
 	-- link to series and title
     Season_ID int auto_increment primary key,  
     Season_Name varchar(100),
-    Series_ID int,  
+    Title_ID int,  
     
-    foreign key (Series_ID) references Series(Series_ID)
+    foreign key (Title_ID) references Title(Title_ID)
+
 );
 
 create table Episode
@@ -99,9 +101,8 @@ create table Movie
 (
 	Movie_Name varchar(100),
     Duration time,
-    Movie_ID int primary key,
+    Title_ID int,
     
-    foreign key (Movie_ID) references Title(Title_ID)
+    foreign key (Title_ID) references Title(Title_ID)
 );
-
 -- update from here
