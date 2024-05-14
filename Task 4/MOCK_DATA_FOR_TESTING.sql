@@ -222,22 +222,6 @@ VALUES
 ('01:55:00', 48),
 ('02:10:00', 50);
 
--- Sample inserts for profile_account table
-INSERT INTO profile_account (Profile_Name, User_ID, Child_Profile) VALUES ('John Doe', 1, FALSE);
-INSERT INTO profile_account (Profile_Name, User_ID, Child_Profile) VALUES ('Jane Smith', 2, FALSE);
-INSERT INTO profile_account (Profile_Name, User_ID, Child_Profile) VALUES ('Alice Johnson', 3, TRUE);
-INSERT INTO profile_account (Profile_Name, User_ID, Child_Profile) VALUES ('Bob Brown', 4, FALSE);
-INSERT INTO profile_account (Profile_Name, User_ID, Child_Profile) VALUES ('Charlie Davis', 1, TRUE);
-INSERT INTO profile_account (Profile_Name, User_ID, Child_Profile) VALUES ('Daisy Evans', 2, TRUE);
-INSERT INTO profile_account (Profile_Name, User_ID, Child_Profile) VALUES ('Ethan Williams', 3, FALSE);
-INSERT INTO profile_account (Profile_Name, User_ID, Child_Profile) VALUES ('Fiona Martinez', 5, FALSE);
-INSERT INTO profile_account (Profile_Name, User_ID, Child_Profile) VALUES ('George Clark', 6, TRUE);
-INSERT INTO profile_account (Profile_Name, User_ID, Child_Profile) VALUES ('Hannah Lewis', 4, TRUE);
-INSERT INTO profile_account (Profile_Name, User_ID, Child_Profile) VALUES ('Ian Walker', 7, FALSE);
-INSERT INTO profile_account (Profile_Name, User_ID, Child_Profile) VALUES ('Jessica Young', 8, TRUE);
-INSERT INTO profile_account (Profile_Name, User_ID, Child_Profile) VALUES ('Kevin Hall', 9, FALSE);
-INSERT INTO profile_account (Profile_Name, User_ID, Child_Profile) VALUES ('Liam Allen', 10, TRUE);
-INSERT INTO profile_account (Profile_Name, User_ID, Child_Profile) VALUES ('Mia Scott', 5, TRUE);
 
 -- Note: Ensure the User_IDs (1 through 10) already exist in the user_account table
 -- Sample inserts for profile_account table with 50 entries
