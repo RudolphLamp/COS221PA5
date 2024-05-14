@@ -136,14 +136,99 @@ VALUES
 
 
 -- Populate 'Episode' table
-INSERT INTO Episode (Episode_Name, Duration, Season_ID) 
-VALUES 
-('Pilot', '00:58:00', 1),
-('The One Where Monica Gets a Roommate', '00:22:00', 2),
-('Winter Is Coming', '00:58:00', 3),
-('Chapter One: The Vanishing of Will Byers', '00:47:00', 4),
-('Pilot', '00:22:00', 5),
-('Simpsons Roasting on an Open Fire', '00:22:00', 6);
+INSERT INTO Episode (Episode_Name, Duration, Season_ID)
+VALUES
+-- Episodes for Season 1 of Title 1
+('Episode 1', '00:45:00', 1),
+('Episode 2', '00:47:00', 1),
+('Episode 3', '00:46:00', 1),
+('Episode 4', '00:48:00', 1),
+('Episode 5', '00:44:00', 1),
+-- Episodes for Season 2 of Title 1
+('Episode 1', '00:45:00', 2),
+('Episode 2', '00:47:00', 2),
+('Episode 3', '00:46:00', 2),
+('Episode 4', '00:48:00', 2),
+('Episode 5', '00:44:00', 2),
+('Episode 6', '00:50:00', 2),
+-- Episodes for Season 1 of Title 3
+('Episode 1', '00:50:00', 3),
+('Episode 2', '00:52:00', 3),
+('Episode 3', '00:51:00', 3),
+('Episode 4', '00:49:00', 3),
+('Episode 5', '00:53:00', 3),
+-- Episodes for Season 2 of Title 3
+('Episode 1', '00:50:00', 4),
+('Episode 2', '00:52:00', 4),
+('Episode 3', '00:51:00', 4),
+('Episode 4', '00:49:00', 4),
+('Episode 5', '00:53:00', 4),
+('Episode 6', '00:55:00', 4),
+-- Episodes for Season 1 of Title 5
+('Episode 1', '00:40:00', 5),
+('Episode 2', '00:42:00', 5),
+('Episode 3', '00:41:00', 5),
+('Episode 4', '00:43:00', 5),
+('Episode 5', '00:44:00', 5),
+-- Episodes for Season 2 of Title 5
+('Episode 1', '00:40:00', 6),
+('Episode 2', '00:42:00', 6),
+('Episode 3', '00:41:00', 6),
+('Episode 4', '00:43:00', 6),
+('Episode 5', '00:44:00', 6),
+('Episode 6', '00:45:00', 6),
+-- Episodes for Season 3 of Title 5
+('Episode 1', '00:50:00', 7),
+('Episode 2', '00:52:00', 7),
+('Episode 3', '00:51:00', 7),
+('Episode 4', '00:49:00', 7),
+('Episode 5', '00:53:00', 7),
+-- Episodes for Season 1 of Title 7
+('Episode 1', '00:48:00', 8),
+('Episode 2', '00:47:00', 8),
+('Episode 3', '00:49:00', 8),
+('Episode 4', '00:50:00', 8),
+('Episode 5', '00:48:00', 8),
+-- Episodes for Season 2 of Title 7
+('Episode 1', '00:48:00', 9),
+('Episode 2', '00:47:00', 9),
+('Episode 3', '00:49:00', 9),
+('Episode 4', '00:50:00', 9),
+('Episode 5', '00:48:00', 9),
+('Episode 6', '00:51:00', 9),
+-- Episodes for Season 1 of Title 9
+('Episode 1', '00:42:00', 10),
+('Episode 2', '00:44:00', 10),
+('Episode 3', '00:43:00', 10),
+('Episode 4', '00:41:00', 10),
+('Episode 5', '00:45:00', 10),
+-- Episodes for Season 2 of Title 9
+('Episode 1', '00:42:00', 11),
+('Episode 2', '00:44:00', 11),
+('Episode 3', '00:43:00', 11),
+('Episode 4', '00:41:00', 11),
+('Episode 5', '00:45:00', 11),
+('Episode 6', '00:46:00', 11),
+
+('Episode 1', '00:46:00', 12),
+('Episode 2', '00:47:00', 12),
+('Episode 3', '00:48:00', 12),
+('Episode 4', '00:49:00', 12),
+('Episode 5', '00:45:00', 12),
+('Episode 6', '00:50:00', 12),
+('Episode 1', '00:46:00', 13),
+('Episode 2', '00:47:00', 13),
+('Episode 3', '00:48:00', 13),
+('Episode 4', '00:49:00', 13),
+('Episode 5', '00:45:00', 13),
+('Episode 1', '00:46:00', 14),
+('Episode 2', '00:47:00', 14),
+('Episode 3', '00:48:00', 14),
+('Episode 4', '00:49:00', 14),
+('Episode 5', '00:45:00', 14),
+('Episode 6', '00:50:00', 14),
+
+
 
 -- Populate 'Movie' table
 INSERT INTO Movie (Duration, Title_ID)
