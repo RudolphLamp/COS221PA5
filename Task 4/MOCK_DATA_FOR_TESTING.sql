@@ -1,4 +1,29 @@
-
+INSERT INTO User_Account (First_Name, Last_Name, Date_of_Birth, User_Password, Admin_Privileges, Email_Address) VALUES
+('John', 'Doe', '1990-05-15', 'password1', 0, 'john.doe@example.com'),
+('Jane', 'Smith', '1988-09-21', 'password2', 0, 'jane.smith@example.com'),
+('Michael', 'Johnson', '1995-03-10', 'password3', 0, 'michael.johnson@example.com'),
+('Emily', 'Brown', '1993-07-03', 'password4', 0, 'emily.brown@example.com'),
+('Daniel', 'Wilson', '1986-12-27', 'password5', 1, 'daniel.wilson@example.com'),
+('Jennifer', 'Martinez', '1991-10-14', 'password6', 0, 'jennifer.martinez@example.com'),
+('Christopher', 'Jones', '1989-06-08', 'password7', 0, 'christopher.jones@example.com'),
+('Amanda', 'Taylor', '1992-08-19', 'password8', 0, 'amanda.taylor@example.com'),
+('Matthew', 'Anderson', '1994-02-04', 'password9', 0, 'matthew.anderson@example.com'),
+('Jessica', 'Thomas', '1987-11-30', 'password10', 0, 'jessica.thomas@example.com'),
+('David', 'Hernandez', '1996-04-25', 'password11', 1, 'david.hernandez@example.com'),
+('Sarah', 'Young', '1985-01-12', 'password12', 0, 'sarah.young@example.com'),
+('Andrew', 'Garcia', '1990-07-17', 'password13', 0, 'andrew.garcia@example.com'),
+('Lauren', 'Lopez', '1988-11-02', 'password14', 0, 'lauren.lopez@example.com'),
+('James', 'Rodriguez', '1993-09-09', 'password15', 0, 'james.rodriguez@example.com'),
+('Megan', 'Martinez', '1986-06-23', 'password16', 0, 'megan.martinez@example.com'),
+('Ryan', 'Lee', '1995-12-18', 'password17', 1, 'ryan.lee@example.com'),
+('Emily', 'Gonzalez', '1989-04-07', 'password18', 0, 'emily.gonzalez@example.com'),
+('Kevin', 'Perez', '1992-03-01', 'password19', 0, 'kevin.perez@example.com'),
+('Ashley', 'Kim', '1994-08-26', 'password20', 0, 'ashley.kim@example.com'),
+('Justin', 'Nguyen', '1987-02-11', 'password21', 0, 'justin.nguyen@example.com'),
+('Nicole', 'Jackson', '1991-05-06', 'password22', 1, 'nicole.jackson@example.com'),
+('Brandon', 'Rivera', '1988-10-31', 'password23', 0, 'brandon.rivera@example.com'),
+('Samantha', 'Harris', '1996-11-15', 'password24', 0, 'samantha.harris@example.com'),
+('Tyler', 'Adams', '1993-08-20', 'password25', 0, 'tyler.adams@example.com');
 
 
 -- Populate 'Title' table
