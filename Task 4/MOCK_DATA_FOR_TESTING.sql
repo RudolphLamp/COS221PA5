@@ -1,42 +1,5 @@
--- Populate 'user' table
-INSERT INTO user (First_Name, Last_Name, Date_of_Birth, user_password) 
-VALUES 
-('John', 'Doe', '1990-05-15', 'password123'),
-('Alice', 'Smith', '1985-09-20', 'securepass'),
-('Michael', 'Johnson', '1988-07-12', 'mysecretpassword'),
-('Emily', 'Brown', '1995-03-28', 'p@ssw0rd'),
-('David', 'Wilson', '1992-11-10', 'password123'),
-('Sophia', 'Lee', '1998-08-18', 'strongpassword');
 
--- Populate 'user_contact_details' table
-INSERT INTO user_contact_details (User_ID, Phone_number, Email_Address) 
-VALUES 
-(1, '123-456-7890', 'john@example.com'),
-(2, '234-567-8901', 'alice@example.com'),
-(3, '345-678-9012', 'michael@example.com'),
-(4, '456-789-0123', 'emily@example.com'),
-(5, '567-890-1234', 'david@example.com'),
-(6, '678-901-2345', 'sophia@example.com');
 
--- Populate 'user_address' table
-INSERT INTO user_address (User_ID, street_number, street_name, city, province, postal_code) 
-VALUES 
-(1, '123', 'Main Street', 'New York', 'NY', '10001'),
-(2, '456', 'Oak Avenue', 'Los Angeles', 'CA', '90001'),
-(3, '789', 'Elm Street', 'Chicago', 'IL', '60601'),
-(4, '1011', 'Pine Road', 'Houston', 'TX', '77001'),
-(5, '1213', 'Maple Lane', 'Miami', 'FL', '33101'),
-(6, '1415', 'Cedar Boulevard', 'San Francisco', 'CA', '94101');
-
--- Populate 'profile' table
-INSERT INTO profile (Profile_Name, Age, User_ID, Profile_language) 
-VALUES 
-('John\'s Profile', YEAR(CURDATE()) - YEAR('1990-05-15'), 1, 'English'),
-('Alice\'s Profile', YEAR(CURDATE()) - YEAR('1985-09-20'), 2, 'English'),
-('Michael\'s Profile', YEAR(CURDATE()) - YEAR('1988-07-12'), 3, 'English'),
-('Emily\'s Profile', YEAR(CURDATE()) - YEAR('1995-03-28'), 4, 'English'),
-('David\'s Profile', YEAR(CURDATE()) - YEAR('1992-11-10'), 5, 'English'),
-('Sophia\'s Profile', YEAR(CURDATE()) - YEAR('1998-08-18'), 6, 'English');
 
 -- Populate 'Title' table
 INSERT INTO Title (Content_Rating, Review_Rating, Release_Date, Profile_ID, Title_Name, Plot_Summary)
@@ -258,4 +221,101 @@ VALUES
 ('01:50:00', 46),
 ('01:55:00', 48),
 ('02:10:00', 50);
+
+-- Sample inserts for profile_account table
+INSERT INTO profile_account (Profile_Name, User_ID, Child_Profile) VALUES ('John Doe', 1, FALSE);
+INSERT INTO profile_account (Profile_Name, User_ID, Child_Profile) VALUES ('Jane Smith', 2, FALSE);
+INSERT INTO profile_account (Profile_Name, User_ID, Child_Profile) VALUES ('Alice Johnson', 3, TRUE);
+INSERT INTO profile_account (Profile_Name, User_ID, Child_Profile) VALUES ('Bob Brown', 4, FALSE);
+INSERT INTO profile_account (Profile_Name, User_ID, Child_Profile) VALUES ('Charlie Davis', 1, TRUE);
+INSERT INTO profile_account (Profile_Name, User_ID, Child_Profile) VALUES ('Daisy Evans', 2, TRUE);
+INSERT INTO profile_account (Profile_Name, User_ID, Child_Profile) VALUES ('Ethan Williams', 3, FALSE);
+INSERT INTO profile_account (Profile_Name, User_ID, Child_Profile) VALUES ('Fiona Martinez', 5, FALSE);
+INSERT INTO profile_account (Profile_Name, User_ID, Child_Profile) VALUES ('George Clark', 6, TRUE);
+INSERT INTO profile_account (Profile_Name, User_ID, Child_Profile) VALUES ('Hannah Lewis', 4, TRUE);
+INSERT INTO profile_account (Profile_Name, User_ID, Child_Profile) VALUES ('Ian Walker', 7, FALSE);
+INSERT INTO profile_account (Profile_Name, User_ID, Child_Profile) VALUES ('Jessica Young', 8, TRUE);
+INSERT INTO profile_account (Profile_Name, User_ID, Child_Profile) VALUES ('Kevin Hall', 9, FALSE);
+INSERT INTO profile_account (Profile_Name, User_ID, Child_Profile) VALUES ('Liam Allen', 10, TRUE);
+INSERT INTO profile_account (Profile_Name, User_ID, Child_Profile) VALUES ('Mia Scott', 5, TRUE);
+
+-- Note: Ensure the User_IDs (1 through 10) already exist in the user_account table
+-- Sample inserts for profile_account table with 50 entries
+INSERT INTO profile_account (Profile_Name, User_ID, Child_Profile) VALUES ('John Doe', 1, FALSE);
+INSERT INTO profile_account (Profile_Name, User_ID, Child_Profile) VALUES ('Jane Smith', 2, FALSE);
+INSERT INTO profile_account (Profile_Name, User_ID, Child_Profile) VALUES ('Alice Johnson', 3, TRUE);
+INSERT INTO profile_account (Profile_Name, User_ID, Child_Profile) VALUES ('Bob Brown', 4, FALSE);
+INSERT INTO profile_account (Profile_Name, User_ID, Child_Profile) VALUES ('Charlie Davis', 1, TRUE);
+INSERT INTO profile_account (Profile_Name, User_ID, Child_Profile) VALUES ('Daisy Evans', 2, TRUE);
+INSERT INTO profile_account (Profile_Name, User_ID, Child_Profile) VALUES ('Ethan Williams', 3, FALSE);
+INSERT INTO profile_account (Profile_Name, User_ID, Child_Profile) VALUES ('Fiona Martinez', 5, FALSE);
+INSERT INTO profile_account (Profile_Name, User_ID, Child_Profile) VALUES ('George Clark', 6, TRUE);
+INSERT INTO profile_account (Profile_Name, User_ID, Child_Profile) VALUES ('Hannah Lewis', 4, TRUE);
+INSERT INTO profile_account (Profile_Name, User_ID, Child_Profile) VALUES ('Ian Walker', 7, FALSE);
+INSERT INTO profile_account (Profile_Name, User_ID, Child_Profile) VALUES ('Jessica Young', 8, TRUE);
+INSERT INTO profile_account (Profile_Name, User_ID, Child_Profile) VALUES ('Kevin Hall', 9, FALSE);
+INSERT INTO profile_account (Profile_Name, User_ID, Child_Profile) VALUES ('Liam Allen', 10, TRUE);
+INSERT INTO profile_account (Profile_Name, User_ID, Child_Profile) VALUES ('Mia Scott', 5, TRUE);
+INSERT INTO profile_account (Profile_Name, User_ID, Child_Profile) VALUES ('Nina Harris', 1, FALSE);
+INSERT INTO profile_account (Profile_Name, User_ID, Child_Profile) VALUES ('Oscar King', 2, FALSE);
+INSERT INTO profile_account (Profile_Name, User_ID, Child_Profile) VALUES ('Paula Wright', 3, TRUE);
+INSERT INTO profile_account (Profile_Name, User_ID, Child_Profile) VALUES ('Quincy Baker', 4, FALSE);
+INSERT INTO profile_account (Profile_Name, User_ID, Child_Profile) VALUES ('Rita Morgan', 5, TRUE);
+INSERT INTO profile_account (Profile_Name, User_ID, Child_Profile) VALUES ('Sammy Bell', 6, TRUE);
+INSERT INTO profile_account (Profile_Name, User_ID, Child_Profile) VALUES ('Tina Wood', 7, FALSE);
+INSERT INTO profile_account (Profile_Name, User_ID, Child_Profile) VALUES ('Uma Perry', 8, TRUE);
+INSERT INTO profile_account (Profile_Name, User_ID, Child_Profile) VALUES ('Victor Reed', 9, FALSE);
+INSERT INTO profile_account (Profile_Name, User_ID, Child_Profile) VALUES ('Wendy Collins', 10, TRUE);
+INSERT INTO profile_account (Profile_Name, User_ID, Child_Profile) VALUES ('Xander Fox', 1, FALSE);
+INSERT INTO profile_account (Profile_Name, User_ID, Child_Profile) VALUES ('Yara Griffin', 2, FALSE);
+INSERT INTO profile_account (Profile_Name, User_ID, Child_Profile) VALUES ('Zane Lee', 3, TRUE);
+INSERT INTO profile_account (Profile_Name, User_ID, Child_Profile) VALUES ('Anna Green', 4, FALSE);
+INSERT INTO profile_account (Profile_Name, User_ID, Child_Profile) VALUES ('Billie Cruz', 5, TRUE);
+INSERT INTO profile_account (Profile_Name, User_ID, Child_Profile) VALUES ('Carlos Hunter', 6, TRUE);
+INSERT INTO profile_account (Profile_Name, User_ID, Child_Profile) VALUES ('Derek Murphy', 7, FALSE);
+INSERT INTO profile_account (Profile_Name, User_ID, Child_Profile) VALUES ('Eve Patel', 8, TRUE);
+INSERT INTO profile_account (Profile_Name, User_ID, Child_Profile) VALUES ('Felix Roberts', 9, FALSE);
+INSERT INTO profile_account (Profile_Name, User_ID, Child_Profile) VALUES ('Gina Stewart', 10, TRUE);
+INSERT INTO profile_account (Profile_Name, User_ID, Child_Profile) VALUES ('Harry Turner', 1, FALSE);
+INSERT INTO profile_account (Profile_Name, User_ID, Child_Profile) VALUES ('Iris White', 2, FALSE);
+INSERT INTO profile_account (Profile_Name, User_ID, Child_Profile) VALUES ('Jackie Adams', 3, TRUE);
+INSERT INTO profile_account (Profile_Name, User_ID, Child_Profile) VALUES ('Kurt Bennett', 4, FALSE);
+INSERT INTO profile_account (Profile_Name, User_ID, Child_Profile) VALUES ('Laura James', 5, TRUE);
+INSERT INTO profile_account (Profile_Name, User_ID, Child_Profile) VALUES ('Max Carter', 6, TRUE);
+INSERT INTO profile_account (Profile_Name, User_ID, Child_Profile) VALUES ('Nora Mitchell', 7, FALSE);
+INSERT INTO profile_account (Profile_Name, User_ID, Child_Profile) VALUES ('Owen Perez', 8, TRUE);
+INSERT INTO profile_account (Profile_Name, User_ID, Child_Profile) VALUES ('Pamela Ross', 9, FALSE);
+INSERT INTO profile_account (Profile_Name, User_ID, Child_Profile) VALUES ('Quinn Sanchez', 10, TRUE);
+INSERT INTO profile_account (Profile_Name, User_ID, Child_Profile) VALUES ('Rachel Bailey', 1, FALSE);
+INSERT INTO profile_account (Profile_Name, User_ID, Child_Profile) VALUES ('Steven Carter', 2, FALSE);
+INSERT INTO profile_account (Profile_Name, User_ID, Child_Profile) VALUES ('Tracy Diaz', 3, TRUE);
+INSERT INTO profile_account (Profile_Name, User_ID, Child_Profile) VALUES ('Ursula Evans', 4, FALSE);
+
+-- Note: Ensure the User_IDs (1 through 10) already exist in the user_account table
+-- Inserting data into Genre table
+INSERT INTO Genre (Genra_Name) VALUES ('Action');
+INSERT INTO Genre (Genra_Name) VALUES ('Comedy');
+INSERT INTO Genre (Genra_Name) VALUES ('Drama');
+INSERT INTO Genre (Genra_Name) VALUES ('Romance');
+INSERT INTO Genre (Genra_Name) VALUES ('Horror');
+INSERT INTO Genre (Genra_Name) VALUES ('Sci-Fi');
+INSERT INTO Genre (Genra_Name) VALUES ('Thriller');
+INSERT INTO Genre (Genra_Name) VALUES ('Fantasy');
+
+
+INSERT INTO Title_Genre (Genre_ID, Title_ID)
+SELECT 
+    FLOOR(RAND() * 8) + 1, -- Generating random genre ID between 1 and 8
+    t.Title_ID
+FROM 
+    (SELECT 1 AS Title_ID UNION SELECT 2 UNION SELECT 3 UNION SELECT 4 UNION SELECT 5 UNION
+    SELECT 6 UNION SELECT 7 UNION SELECT 8 UNION SELECT 9 UNION SELECT 10 UNION
+    SELECT 11 UNION SELECT 12 UNION SELECT 13 UNION SELECT 14 UNION SELECT 15 UNION
+    SELECT 16 UNION SELECT 17 UNION SELECT 18 UNION SELECT 19 UNION SELECT 20 UNION
+    SELECT 21 UNION SELECT 22 UNION SELECT 23 UNION SELECT 24 UNION SELECT 25 UNION
+    SELECT 26 UNION SELECT 27 UNION SELECT 28 UNION SELECT 29 UNION SELECT 30 UNION
+    SELECT 31 UNION SELECT 32 UNION SELECT 33 UNION SELECT 34 UNION SELECT 35 UNION
+    SELECT 36 UNION SELECT 37 UNION SELECT 38 UNION SELECT 39 UNION SELECT 40 UNION
+    SELECT 41 UNION SELECT 42 UNION SELECT 43 UNION SELECT 44 UNION SELECT 45 UNION
+    SELECT 46 UNION SELECT 47 UNION SELECT 48 UNION SELECT 49 UNION SELECT 50) AS t;
 
