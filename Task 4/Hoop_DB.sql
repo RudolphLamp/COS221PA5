@@ -39,11 +39,9 @@ create table Title
     Content_Rating varchar(10),
     Review_Rating varchar(5), 
     Release_Date date,
-    Profile_ID int,
     Title_Name varchar(100),
     Plot_Summary varchar(1000),
     
-    foreign key (Profile_ID) references profile_account(Profile_ID)
     
 );
 
