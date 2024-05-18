@@ -3,6 +3,40 @@
 -- drop database Hoop_DB;
 
 
+
+-- language table
+create table Available_Language
+(
+	Language_ID int auto_increment primary key,
+	Language_Name varchar(20) not null
+	
+);
+
+-- dubbed_for language table
+create table Dubbed_For
+(
+	Language_ID int ,
+    Title_ID int,
+    
+	foreign key (Language_ID) references Available_Language(Language_ID),
+	foreign key (Title_ID) references Title(Title_ID)
+	
+	
+);
+
+-- subtitles_for language table
+create table Subtitles_For
+(
+	Language_ID int,
+	Title_ID int,
+
+	foreign key (Language_ID) references Available_Language(Language_ID),
+	foreign key (Title_ID) references Title(Title_ID)
+	
+	
+);
+
+
 -- table with simple user data,complex and composite get their own tables
 create table User_Account
 (
@@ -19,6 +53,7 @@ create table User_Account
 
 
 
+
 -- profile table
 create table profile_account
 (
@@ -27,8 +62,10 @@ create table profile_account
     
     User_ID int,
     Child_Profile boolean,
+	Language_ID int,
     
     foreign key (User_ID) references user_account(User_ID)
+	foreign key (Language_ID int) references Available_Language(Language_ID int)
 );
 
 -- update from here
@@ -50,8 +87,10 @@ create table Title
     Plot_Summary varchar(1731),
     Crew varchar(100),
     Image varchar(127),
+    Language_ID int,
 
     foreign key (Content_Rating_ID) references Content_Rating(Content_Rating_ID)
+	foreign key (Language_ID int) references Available_Language(Language_ID int)
     
 );
 
@@ -122,39 +161,6 @@ create table Watched
     foreign key (Profile_ID) references Profile_Account(Profile_ID),
     foreign key (Title_ID) references Title(Title_ID)
     
-	
-);
-
-
--- language table
-create table Available_Language
-(
-	Language_ID int auto_increment primary key,
-	Language_Name varchar(20) not null
-	
-);
-
--- dubbed_for language table
-create table Dubbed_For
-(
-	Language_ID int ,
-    Title_ID int,
-    
-	foreign key (Language_ID) references Available_Language(Language_ID),
-	foreign key (Title_ID) references Title(Title_ID)
-	
-	
-);
-
--- subtitles_for language table
-create table Subtitles_For
-(
-	Language_ID int,
-	Title_ID int,
-
-	foreign key (Language_ID) references Available_Language(Language_ID),
-	foreign key (Title_ID) references Title(Title_ID)
-	
 	
 );
 
