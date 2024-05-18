@@ -39,7 +39,7 @@ create table profile_account
 	Language_ID int,
     
     foreign key (User_ID) references user_account(User_ID),
-	foreign key (Language_ID int) references Available_Language(Language_ID int)
+	foreign key (Language_ID) references Available_Language(Language_ID)
 );
 
 -- update from here
@@ -64,7 +64,7 @@ create table Title
     Language_ID int,
 
     foreign key (Content_Rating_ID) references Content_Rating(Content_Rating_ID),
-	foreign key (Language_ID int) references Available_Language(Language_ID int)
+	foreign key (Language_ID) references Available_Language(Language_ID)
     
 );
 
