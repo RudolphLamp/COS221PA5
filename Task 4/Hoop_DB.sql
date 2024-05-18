@@ -33,15 +33,24 @@ create table profile_account
 
 -- update from here
 
+create table Content_Rating
+(
+	Content_Rating_ID int auto_increment primary key,
+	Rating varchar(11),
+	Child_Safe boolean
+);
+
 create table Title
 (
 	Title_ID int auto_increment primary key,
-    Content_Rating varchar(10),
-    Review_Rating varchar(5), 
-    Release_Date date,
     Title_Name varchar(100),
-    Plot_Summary varchar(1000),
-    
+    Content_Rating int(11),
+    Review_Rating varchar(5), 
+    Release_Date int(5),
+    Plot_Summary varchar(1731),
+    Crew varchar(100),
+
+    foreign key (Content_Rating_ID) references Content_Rating(Content_Rating_ID)
     
 );
 
