@@ -158,17 +158,7 @@ create table Subtitles_For
 	
 );
 
--- Original_language table
-create table Original_Language
-(
-	Language_ID int ,
-    Title_ID int,
-    
-	foreign key (Language_ID) references Available_Language(Language_ID),
-	foreign key (Title_ID) references Title(Title_ID)
-	
-	
-);
+
 
 -- production company table
 create table Production_Company
