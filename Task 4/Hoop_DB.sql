@@ -44,8 +44,8 @@ create table Title
 (
 	Title_ID int auto_increment primary key,
     Title_Name varchar(100),
-    Content_Rating int(11),
-    Review_Rating varchar(5), 
+    Content_Rating_ID int,
+    Review_Rating int(11), 
     Release_Date int(5),
     Plot_Summary varchar(1731),
     Crew varchar(100),
