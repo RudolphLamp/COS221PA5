@@ -49,6 +49,7 @@ create table Title
     Release_Date int(5),
     Plot_Summary varchar(1731),
     Crew varchar(100),
+    Image varchar(127),
 
     foreign key (Content_Rating_ID) references Content_Rating(Content_Rating_ID)
     
