@@ -38,7 +38,7 @@ create table profile_account
     Child_Profile boolean,
 	Language_ID int,
     
-    foreign key (User_ID) references user_account(User_ID)
+    foreign key (User_ID) references user_account(User_ID),
 	foreign key (Language_ID int) references Available_Language(Language_ID int)
 );
 
