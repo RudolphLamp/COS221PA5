@@ -196,8 +196,7 @@ create table Produced
 create table Cast_
 (
 	Actor_ID int auto_increment primary key,
-	First_Name varchar(20) not null,
-	Last_Name varchar(20) not null
+	Name varchar(40) not null
 
 	-- check relationship
 	
