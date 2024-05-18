@@ -63,7 +63,7 @@ create table Title
     Image varchar(127),
     Language_ID int,
 
-    foreign key (Content_Rating_ID) references Content_Rating(Content_Rating_ID)
+    foreign key (Content_Rating_ID) references Content_Rating(Content_Rating_ID),
 	foreign key (Language_ID int) references Available_Language(Language_ID int)
     
 );
