@@ -57,10 +57,6 @@ create table Title
 create table Series
 (
     Title_ID int,
-	
-    First_Episode date, -- would year make more sense?
-    Last_Episode date,
-    
     
     foreign key (Title_ID) references Title(Title_ID)
 );
@@ -70,6 +66,7 @@ create table Season
 (
 	-- link to series and title
     Season_ID int auto_increment primary key,  
+    Season_Number int(4),
     Season_Name varchar(100),
     Title_ID int,  
     
@@ -81,8 +78,9 @@ create table Episode
 (
 	-- link to season and title
     Episode_ID int auto_increment primary key,
+    Episode_Number int(4),
     Episode_Name varchar(100),
-    Duration time,
+    Duration int(4),
     
     Season_ID int,  
     
@@ -92,7 +90,7 @@ create table Episode
 create table Movie
 (
 	
-    Duration time,
+    Duration int(4),
     Title_ID int,
     
     foreign key (Title_ID) references Title(Title_ID)
@@ -100,7 +98,7 @@ create table Movie
 
 create table Review
 (
-	Rating varchar(10),
+	Rating int(2),
     Review_Content varchar(250),
     Title_ID int,
     Profile_ID int,
@@ -118,13 +116,13 @@ create table Watched
 (
 	Profile_ID int,
 	Title_ID int,
+	Watch_Date date,
     
     foreign key (Profile_ID) references Profile_Account(Profile_ID),
     foreign key (Title_ID) references Title(Title_ID)
     
 	
 );
-
 
 
 -- language table
@@ -159,6 +157,18 @@ create table Subtitles_For
 	
 );
 
+-- Original_language table
+create table Original_Language
+(
+	Language_ID int ,
+    Title_ID int,
+    
+	foreign key (Language_ID) references Available_Language(Language_ID),
+	foreign key (Title_ID) references Title(Title_ID)
+	
+	
+);
+
 -- production company table
 create table Production_Company
 (
@@ -180,31 +190,6 @@ create table Produced
 );
 
 
-
--- crew table
-create table Crew
-(
-	Crew_ID int auto_increment primary key,
-	First_Name varchar(20) not null,
-	Last_Name varchar(20) not null
-
-	-- check relationship
-	
-);
-
--- worked_on table
-create table Worked_On
-(
-	Crew_ID int,
-	Title_ID int auto_increment,
-	Job varchar(30),
-
-	foreign key (Crew_ID) references Crew(Crew_ID),
-	foreign key (Title_ID) references Title(Title_ID)
-
-	-- check relationship
-	
-);
 
 -- cast table
 create table Cast_
