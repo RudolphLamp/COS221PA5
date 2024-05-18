@@ -12,30 +12,6 @@ create table Available_Language
 	
 );
 
--- dubbed_for language table
-create table Dubbed_For
-(
-	Language_ID int ,
-    Title_ID int,
-    
-	foreign key (Language_ID) references Available_Language(Language_ID),
-	foreign key (Title_ID) references Title(Title_ID)
-	
-	
-);
-
--- subtitles_for language table
-create table Subtitles_For
-(
-	Language_ID int,
-	Title_ID int,
-
-	foreign key (Language_ID) references Available_Language(Language_ID),
-	foreign key (Title_ID) references Title(Title_ID)
-	
-	
-);
-
 
 -- table with simple user data,complex and composite get their own tables
 create table User_Account
@@ -50,8 +26,6 @@ create table User_Account
       constraint user_email unique lower(Email_Address), -- lowercase 
     constraint email_format check (Email_Address like '%@%.%') -- format email someaddress@something.com
 );
-
-
 
 
 -- profile table
@@ -92,6 +66,31 @@ create table Title
     foreign key (Content_Rating_ID) references Content_Rating(Content_Rating_ID)
 	foreign key (Language_ID int) references Available_Language(Language_ID int)
     
+);
+
+
+-- dubbed_for language table
+create table Dubbed_For
+(
+	Language_ID int ,
+    Title_ID int,
+    
+	foreign key (Language_ID) references Available_Language(Language_ID),
+	foreign key (Title_ID) references Title(Title_ID)
+	
+	
+);
+
+-- subtitles_for language table
+create table Subtitles_For
+(
+	Language_ID int,
+	Title_ID int,
+
+	foreign key (Language_ID) references Available_Language(Language_ID),
+	foreign key (Title_ID) references Title(Title_ID)
+	
+	
 );
 
 create table Series
