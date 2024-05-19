@@ -110,8 +110,11 @@ if ($data['type'] == 'Register') {
     "Last_Name": "Doe",
     "Email_Address": "john.doe@example.com",
     "User_Password": "SecurePassword123!",
-    "Date_of_Birth": "1990-01-01",
-    "Admin_Privileges": 0
+    "Date_of_Birth": "1990-01-01"
+    -----------------------------------------------------
+        Could include if we want to create an admin user
+        "Admin_Privileges": 1 
+    -----------------------------------------------------
 } -->
 
 
