@@ -29,15 +29,15 @@ class API {
             return json_encode(['status' => 'error', 'message' => 'User already exists']);
         }
     
-        // Store the password as plain text (not recommended for production)
-        $plain_password = $password;
+        // Hash the password
+        $hashed_password = password_hash($password, PASSWORD_DEFAULT);
     
         // Insert the new user into the database
         $stmt = $mysqli->prepare("INSERT INTO User_Account (First_Name, Last_Name, Email_Address, User_Password, Date_of_Birth, Admin_Privileges) VALUES (?, ?, ?, ?, ?, ?)");
         if ($stmt === false) {
             die('prepare() failed: ' . htmlspecialchars($mysqli->error));
         }
-        $stmt->bind_param("sssssi", $firstName, $lastName, $email, $plain_password, $dateOfBirth, $adminPrivileges);
+        $stmt->bind_param("sssssi", $firstName, $lastName, $email, $hashed_password, $dateOfBirth, $adminPrivileges);
         if ($stmt->execute() === false) {
             die('execute() failed: ' . htmlspecialchars($stmt->error));
         }
@@ -51,6 +51,40 @@ class API {
     }
   
 
+   
+  
+    public function hashExistingPasswords() {
+        global $mysqli;
+    
+        // Select users where User_ID is between 364 and 665
+        $stmt = $mysqli->prepare("SELECT * FROM User_Account WHERE User_ID BETWEEN 999 AND 1005");
+        if ($stmt === false) {
+            die('prepare() failed: ' . htmlspecialchars($mysqli->error));
+        }
+        $stmt->execute();
+        $result = $stmt->get_result();
+    
+        // Loop through each user
+        while ($user = $result->fetch_assoc()) {
+            // Hash the password
+            $hashed_password = password_hash($user['User_Password'], PASSWORD_DEFAULT);
+    
+            // Update the user's password in the database
+            $stmt = $mysqli->prepare("UPDATE User_Account SET User_Password = ? WHERE User_ID = ?");
+            if ($stmt === false) {
+                die('prepare() failed: ' . htmlspecialchars($mysqli->error));
+            }
+            $stmt->bind_param("si", $hashed_password, $user['User_ID']);
+            if ($stmt->execute() === false) {
+                die('execute() failed: ' . htmlspecialchars($stmt->error));
+            }
+        }
+    
+        return json_encode(['status' => 'success', 'message' => 'Passwords for users 364 to 665 have been hashed']);
+    }
+
+
+
     public function login($email, $password) {
         global $mysqli;
     
@@ -61,6 +95,7 @@ class API {
         }
     
         // Bind the email parameter
+    
         $stmt->bind_param("s", $email);
         $stmt->execute();
         $result = $stmt->get_result();
@@ -69,8 +104,8 @@ class API {
         if ($result->num_rows > 0) {
             $user = $result->fetch_assoc();
     
-            // Directly compare the plain text password
-            if ($password === $user['User_Password']) {
+            // Verify the password
+            if (password_verify($password, $user['User_Password'])) {
                 // Remove the password from the user data
                 unset($user['User_Password']);
     
@@ -86,8 +121,8 @@ class API {
             return json_encode(['status' => 'error', 'message' => 'User does not exist']);
         }
     }
-    
 }
+
 
 $api = new API();
 $data = json_decode(file_get_contents('php://input'), true);
@@ -96,7 +131,10 @@ if ($data['type'] == 'Register') {
     echo $api->register($data['First_Name'], $data['Last_Name'], $data['Email_Address'], $data['User_Password'], $data['Date_of_Birth'], $adminPrivileges);
 } elseif ($data['type'] == 'Login') {
     echo $api->login($data['Email_Address'], $data['User_Password']);
+} elseif ($data['type'] == 'HashPasswords') {
+    echo $api->hashExistingPasswords();
 }
+
 
 ?>
 
@@ -110,11 +148,8 @@ if ($data['type'] == 'Register') {
     "Last_Name": "Doe",
     "Email_Address": "john.doe@example.com",
     "User_Password": "SecurePassword123!",
-    "Date_of_Birth": "1990-01-01"
-    -----------------------------------------------------
-        Could include if we want to create an admin user
-        "Admin_Privileges": 1 
-    -----------------------------------------------------
+    "Date_of_Birth": "1990-01-01",
+    "Admin_Privileges": 0
 } -->
 
 
@@ -128,4 +163,20 @@ if ($data['type'] == 'Register') {
     "type": "Login",
     "Email_Address": "john.doe@example.com",
     "User_Password": "SecurePassword123!"
+} -->
+
+
+<!-- 
+Added an function to hash all the existing passwords in the database,
+ but since wheatley is ratelimited you must go change the,
+ Between 0 and 365 in increaments of 350. 
+ so The next one will be 350 to 700 and so on.
+WHERE User_ID BETWEEN 0 AND 365"); change that 
+----------------------------------------------------------------
+    For HashPasswords:    NB!!!!! 
+    ONLY RUN THIS ONCE 
+    WE WILL REMOVE AFTER EVENONE HASHED THEIR PASSWORDS 
+----------------------------------------------------------------
+{
+    "type": "HashPasswords"
 } -->
