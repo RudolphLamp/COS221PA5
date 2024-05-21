@@ -107,6 +107,30 @@ class API {
         return json_encode(['status' => 'success', 'message' => 'Passwords for users 364 to 665 have been hashed']);
     }
 
+ 
+   
+    public function getDetails($titleId) {
+        global $mysqli;
+    
+        // Prepare the SQL statement
+        $stmt = $mysqli->prepare("SELECT Title_ID, Title_Name, Content_Rating_ID, Review_Rating, Release_Date, Plot_Summary, Crew, Image, Language_ID FROM title WHERE Title_ID = ?");
+        if ($stmt === false) {
+            die('prepare() failed: ' . htmlspecialchars($mysqli->error));
+        }
+    
+        // Bind the titleId parameter
+        $stmt->bind_param("i", $titleId);
+    
+        $stmt->execute();
+        $result = $stmt->get_result();
+    
+        // Fetch the movie details
+        $movieDetails = $result->fetch_assoc();
+    
+        return json_encode(['status' => 'success', 'data' => $movieDetails], JSON_UNESCAPED_SLASHES);
+    }
+    
+
 
 
     public function login($email, $password) {
@@ -157,10 +181,12 @@ if ($data['type'] == 'Register') {
     echo $api->login($data['Email_Address'], $data['User_Password']);
 } elseif ($data['type'] == 'HashPasswords') {
     echo $api->hashExistingPasswords();
-} 
-elseif ($data['type'] == 'SearchTitles') {
+} elseif ($data['type'] == 'SearchTitles') {
     echo $api->searchMovieTitles($data['Title_Name']);
+} elseif ($data['type'] == 'GetDetails') {
+    echo $api->getDetails($data['Title_ID']);
 }
+
 
 
 
@@ -216,4 +242,19 @@ Added an function to hash all the existing passwords in the database,
 {
     "type": "SearchTitles",
     "Title_Name": "Attack"
+} -->
+
+
+
+<!-- 
+    HERE IS THE MOST IMPORTANT ONE
+    GetDetails
+    It's for the pop up. So when you click on a movie it will show the details
+    how we could implement this is js I think when we click on the movie pic
+    it adds the Title_ID in the url and then when we load to the info page we pull that id
+    Else we can do that in a cookie but I think it will be a cluster fuck.
+    NB!!!! THIS ONLY RETURNS ALL THE FIELDS THUS FAR IN THE title tb but we will add the other sql q soon.
+{
+    "type": "GetDetails",
+    "Title_ID": 1
 } -->
