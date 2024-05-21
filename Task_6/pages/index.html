@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Hoop Homepage</title>
+    <link rel="stylesheet" href="../styles/styles.css" />
+  </head>
+  <body>
+    <header>
+      <div class="container">
+        <div class="logo">
+          <img src="../resources/images/hoop_logo.png" alt="Hoop Logo" />
+        </div>
+        <nav>
+          <ul>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="add-movie.html">Add Movie</a></li>
+            <li><a href="add-series.html">Add Serie</a></li>
+          </ul>
+        </nav>
+      </div>
+    </header>
+    <main>
+      <h2 class="subhead">Movies</h2>
+      <div class="search-filter">
+        <input
+          type="text"
+          id="movieSearch"
+          placeholder="Search movies..."
+          onkeyup="searchMovies(this.value)" />
+        <select id="movieFilter" onchange="filterMovies(this.value)">
+          <option value="">Filter by Genre</option>
+          <option value="Action">Action</option>
+          <option value="Adventure">Adventure</option>
+          <!-- Add more options as needed -->
+        </select>
+        <button onclick="sortMoviesByRating()">Sort Movies by Rating</button>
+      </div>
+      <div class="container">
+        <section class="movies">
+          <!-- Movie posters will be dynamically added here -->
+        </section>
+
+        <h2 class="subhead">Series</h2>
+        <div class="search-filter">
+          <input
+            type="text"
+            id="seriesSearch"
+            placeholder="Search series..."
+            onkeyup="searchSeries(this.value)" />
+          <button onclick="">
+            Sort Series by Seasons
+          </button>
+        </div>
+
+        <section class="series">
+          <!-- Series posters will be dynamically added here -->
+        </section>
+      </div>
+    </main>
+    <footer>
+      <div class="container">
+        <p>&copy; 2024 Hoop. All rights reserved.</p>
+      </div>
+    </footer>
+    <script src="../scripts/scripts.js"></script>
+  </body>
+</html>
