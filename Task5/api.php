@@ -109,11 +109,12 @@ class API {
 
  
    
+    
     public function getDetails($titleId) {
         global $mysqli;
     
         // Prepare the SQL statement
-        $stmt = $mysqli->prepare("SELECT Title_ID, Title_Name, Content_Rating_ID, Review_Rating, Release_Date, Plot_Summary, Crew, Image, Language_ID FROM title WHERE Title_ID = ?");
+        $stmt = $mysqli->prepare("SELECT Title_ID, Title_Name, Content_Rating_ID, Review_Rating, Release_Date, Plot_Summary, Crew, Image, IFNULL(Language_ID, 0) AS Language_ID FROM title WHERE Title_ID = ?");
         if ($stmt === false) {
             die('prepare() failed: ' . htmlspecialchars($mysqli->error));
         }
@@ -127,8 +128,27 @@ class API {
         // Fetch the movie details
         $movieDetails = $result->fetch_assoc();
     
+        // Get the language name
+        $stmt = $mysqli->prepare("SELECT Language_Name FROM available_language WHERE Language_ID = ?");
+        if ($stmt === false) {
+            die('prepare() failed: ' . htmlspecialchars($mysqli->error));
+        }
+    
+        // Bind the languageId parameter
+        $stmt->bind_param("i", $movieDetails['Language_ID']);
+    
+        $stmt->execute();
+        $result = $stmt->get_result();
+    
+        // Fetch the language name
+        $language = $result->fetch_assoc();
+    
+        // Replace the Language_ID with the Language_Name in the movie details
+        $movieDetails['Language_ID'] = $language['Language_Name'];
+    
         return json_encode(['status' => 'success', 'data' => $movieDetails], JSON_UNESCAPED_SLASHES);
     }
+    
     
 
 
