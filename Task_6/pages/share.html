@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Favourites</title>
+    <link rel="stylesheet" href="../styles/styles_share.css" />
+</head>
+
+<body>
+    <header>
+        <div class="container">
+            <div class="logo">
+                <img src="../resources/images/hoop_logo.png" alt="Hoop Logo" />
+            </div>
+            <nav>
+                <ul>
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="accounts.html">Account</a></li>
+                    <li><a href="share.html">Share</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <h1>Share with friends</h1>
+    <!-- Basic Share Links -->
+    <div class="a2a_kit a2a_kit_size_32 a2a_default_style">
+        <a class="a2a_button_facebook" href="https://www.facebook.com/sharer/sharer.php?u=<URL>"></a>
+        <a href="https://twitter.com/share?url=<URL>&text=<TEXT>via=<USERNAME>"></a>
+        <a class="a2a_button_reddit" href="https://reddit.com/submit?url=<URL>&title=<TITLE>"></a>
+        <!-- Email (subject, body) -->
+        <a class="a2a_button_email" href="mailto:?subject=<SUBJECT>&body=<BODY>"></a>
+    </div>
+    
+    <footer>
+        <div class="container">
+            <p>&copy; 2024 Hoop. All rights reserved.</p>
+        </div>
+    </footer>
+    <script>
+        var a2a_config = a2a_config || {};
+        a2a_config.num_services = 6;
+    </script>
+    <script async src="https://static.addtoany.com/menu/page.js"></script>
+</body>
+
+</html>
