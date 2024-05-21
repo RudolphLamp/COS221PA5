@@ -114,7 +114,7 @@ class API {
         global $mysqli;
     
         // Prepare the SQL statement
-        $stmt = $mysqli->prepare("SELECT Title_ID, Title_Name, Content_Rating_ID, Review_Rating, Release_Date, Plot_Summary, Crew, Image, IFNULL(Language_ID, 0) AS Language_ID FROM title WHERE Title_ID = ?");
+        $stmt = $mysqli->prepare("SELECT Title_ID, Title_Name, IFNULL(Content_Rating_ID, 0) AS Content_Rating_ID, Review_Rating, Release_Date, Plot_Summary, Crew, Image, IFNULL(Language_ID, 0) AS Language_ID FROM title WHERE Title_ID = ?");
         if ($stmt === false) {
             die('prepare() failed: ' . htmlspecialchars($mysqli->error));
         }
@@ -145,6 +145,24 @@ class API {
     
         // Replace the Language_ID with the Language_Name in the movie details
         $movieDetails['Language_ID'] = $language['Language_Name'];
+    
+        // Get the content rating
+        $stmt = $mysqli->prepare("SELECT Rating FROM content_rating WHERE Content_Rating_ID = ?");
+        if ($stmt === false) {
+            die('prepare() failed: ' . htmlspecialchars($mysqli->error));
+        }
+    
+        // Bind the contentRatingId parameter
+        $stmt->bind_param("i", $movieDetails['Content_Rating_ID']);
+    
+        $stmt->execute();
+        $result = $stmt->get_result();
+    
+        // Fetch the content rating
+        $contentRating = $result->fetch_assoc();
+    
+        // Replace the Content_Rating_ID with the Rating in the movie details
+        $movieDetails['Content_Rating_ID'] = $contentRating['Rating'];
     
         return json_encode(['status' => 'success', 'data' => $movieDetails], JSON_UNESCAPED_SLASHES);
     }
