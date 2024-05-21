@@ -50,7 +50,27 @@ class API {
         return json_encode(['status' => 'success', 'timestamp' => round(microtime(true) * 1000), 'data' => ["User_ID" => $userID, "Email" => $email, "First_Name" => $firstName, "message" => $message]]);
     }
   
-
+    public function searchMovieTitles($title) {
+        global $mysqli;
+    
+        // Prepare the SQL statement
+        $stmt = $mysqli->prepare("SELECT Title_ID, Title_Name FROM title WHERE Title_Name LIKE ?");
+        if ($stmt === false) {
+            die('prepare() failed: ' . htmlspecialchars($mysqli->error));
+        }
+    
+        // Bind the title parameter
+        $title = '%' . $title . '%';
+        $stmt->bind_param("s", $title);
+    
+        $stmt->execute();
+        $result = $stmt->get_result();
+    
+        // Fetch all the matching titles
+        $titles = $result->fetch_all(MYSQLI_ASSOC);
+    
+        return json_encode(['status' => 'success', 'data' => $titles]);
+    }
    
   
     public function hashExistingPasswords() {
@@ -133,7 +153,11 @@ if ($data['type'] == 'Register') {
     echo $api->login($data['Email_Address'], $data['User_Password']);
 } elseif ($data['type'] == 'HashPasswords') {
     echo $api->hashExistingPasswords();
+} 
+elseif ($data['type'] == 'SearchTitles') {
+    echo $api->searchMovieTitles($data['Title_Name']);
 }
+
 
 
 ?>
@@ -171,7 +195,6 @@ Added an function to hash all the existing passwords in the database,
  but since wheatley is ratelimited you must go change the,
  Between 0 and 365 in increaments of 350. 
  so The next one will be 350 to 700 and so on.
-WHERE User_ID BETWEEN 0 AND 365"); change that 
 ----------------------------------------------------------------
     For HashPasswords:    NB!!!!! 
     ONLY RUN THIS ONCE 
@@ -180,3 +203,13 @@ WHERE User_ID BETWEEN 0 AND 365"); change that
 {
     "type": "HashPasswords"
 } -->
+
+
+<!-- 
+    Search now implemented not sure what it must return? 
+    I just returned the Title_ID and Title_Name    
+    with fuzzy search so no need to do recommended search
+{
+    "type": "SearchTitles",
+    "Title_Name": "Attack"
+} -
