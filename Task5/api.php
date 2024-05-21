@@ -50,6 +50,8 @@ class API {
         return json_encode(['status' => 'success', 'timestamp' => round(microtime(true) * 1000), 'data' => ["User_ID" => $userID, "Email" => $email, "First_Name" => $firstName, "message" => $message]]);
     }
   
+    
+  
     public function searchMovieTitles($title) {
         global $mysqli;
     
@@ -71,6 +73,8 @@ class API {
     
         return json_encode(['status' => 'success', 'data' => $titles]);
     }
+    
+
    
   
     public function hashExistingPasswords() {
@@ -212,4 +216,4 @@ Added an function to hash all the existing passwords in the database,
 {
     "type": "SearchTitles",
     "Title_Name": "Attack"
-} -
+} -->
