@@ -1,119 +1,261 @@
 <?php
-ini_set('display_errors', 1);
-ini_set('display_startup_errors', 1);
-error_reporting(E_ALL);
 
-include_once 'config.php';
 class API {
-    
+    private static $instance;
 
-    public function register($firstName, $lastName, $email, $password, $dateOfBirth, $adminPrivileges) {
-        global $mysqli;
-        // Validate the email
-        if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-            return json_encode(['status' => 'error', 'message' => 'Invalid email']);
+    public static function getInstance() {
+        if (!isset(self::$instance)) {
+            self::$instance = new API();
         }
-        // Validate the password
-        if (!preg_match('/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/', $password)) {
-            return json_encode(['status' => 'error', 'message' => 'Password must have at least 8 characters with at least one uppercase letter, one number, one special character, and one lowercase letter.']);
+        return self::$instance;
+    }
+
+    public function handleRequest() {
+        if ($_SERVER["REQUEST_METHOD"] !== "POST") {
+            $this->sendResponse(405, "Method Not Allowed - Only POST method is allowed");
+            return;
         }
-        // Check if the user already exists
-        $stmt = $mysqli->prepare("SELECT * FROM User_Account WHERE Email_Address = ?");
-        if ($stmt === false) {
-            die('prepare() failed: ' . htmlspecialchars($mysqli->error));
+
+
+        $json = file_get_contents('php://input');
+        $data = json_decode($json, true);
+
+
+
+       
+        if (!isset($data['type'])) {
+            $this->sendResponse(400, "Bad Request - 'type' field is required");
+            return;
         }
-        $stmt->bind_param("s", $email);
+
+        
+        switch ($data['type']) {
+            case 'Register':
+                $this->handleRegistration($data);
+                break;  
+            case 'GetMovies':
+                $this->handleGetMovies($data);
+                break;
+            case 'GetSeries':
+                $this->handleGetSeries($data);
+                break;
+            case 'Login':
+                $this->handleLogin($data);
+                break;
+            
+            case 'SavePreferences':
+                $this->handleSavePreferences($data);
+                break;
+
+            case 'LoadPreferences': 
+                $this->handleLoadPreferences($data);
+                break;
+            case 'AddToFavorites':
+                $this->handleAddToFavorites($data);
+                break;
+
+            case 'GetAllFavouriteListings':
+                $this->handleGetAllFavoriteListings($data);
+                break;
+
+            case'RemoveFromFavorites':
+                $this->handleRemoveFromFavorites($data) ;
+                break;
+
+            case 'CreateAuction':
+                $this->handleCreateAuction($data);
+                break;
+
+            case 'GetAllAuctions':
+                $this->handleGetAuctions($data);
+                break;
+    
+            case 'UpdateAuction':
+                $this->handleUpdateAuction($data);
+                break;
+    
+            case 'GetAuction':
+                $this->handleGetAuction($data);
+                break;
+            case 'GetAllActiveAuctions':
+                $this->handleGetAllActiveAuctions($data);
+                break;
+            case 'GetAllAuctions':
+                $this->handleGetAllAuctions($data);
+                break;
+            case 'getAuctionListings':
+                $this->handleGetAuctionListings($data);
+                break;
+            default:
+                $this->sendResponse(400, "Bad Request - Invalid 'type' field");
+                break;
+        }
+    }
+
+    private function sendResponse($status, $message, $data = []) {
+        http_response_code($status);
+        echo json_encode(['status' => $message, 'timestamp' => time(), 'data' => $data]);
+    }
+
+    private function validateRequestBody($data) {
+        return isset($data['type']) && isset($data['name']) && isset($data['surname']) && isset($data['email']) && isset($data['password']) && isset($data['DOB']);
+    }
+
+    private function handleRegistration($data) {
+        if (!$this->validateRequestBody($data)) {
+            $this->sendResponse(400, "Bad Request - Invalid JSON POST body");
+            return;
+        }
+
+        if (empty($data)) {
+            $this->sendResponse(400 ,"Post parameters are missing");
+            return;
+        }
+
+        $validationErrors = $this->validateUserData($data);
+        if (!empty($validationErrors)) {
+            
+            $this->sendResponse(400, "Bad Request", ["errors" => $validationErrors]);
+            return;
+        }
+
+        
+        if ($this->userExists($data['email'])) {
+            $this->sendResponse(409, "Conflict - User already exists");
+            return;
+        }
+
+        
+        
+        $success = $this->insertUser($data);
+
+        
+        if ($success) {
+            
+            $this->sendResponse(200, "Success");
+        } else {
+            
+            $this->sendResponse(500, "Internal Server Error - Failed to insert user into database");
+        }
+    }
+
+    private function validateUserData($data) {
+        $errors = [];
+    
+        $emailRegex = '/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/';
+        $passwordRegex = '/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/';
+        $nameRegex = '/^[a-zA-Z\s]+$/';
+        
+    
+        if (!preg_match($emailRegex, $data['email'])) {
+            $errors[] = "Invalid email address";
+        }
+    
+        if (!preg_match($passwordRegex, $data['password'])) {
+            $errors[] = "Password must contain at least one lowercase letter, one uppercase letter, one digit, one special character, and be at least 8 characters long";
+        }
+    
+        if (!preg_match($nameRegex, $data['name'])) {
+            $errors[] = "Invalid name";
+        }
+    
+        if (!preg_match($nameRegex, $data['surname'])) {
+            $errors[] = "Invalid surname";
+        }
+    
+        return $errors;
+    }
+
+    private function userExists($email) {
+        require_once('config.php');
+        $mysqli = new mysqli(DB_HOST, DB_USER, DB_PASSWORD, DB_NAME);
+    
+        if ($mysqli->connect_error) {
+            die("Connection failed: " . $mysqli->connect_error);
+        }
+    
+        
+        $stmtEmail = $mysqli->prepare("SELECT * FROM user_account WHERE Email_Address = ?");
+        $stmtEmail->bind_param("s", $email);
+        $stmtEmail->execute();
+        $resultEmail = $stmtEmail->get_result();
+        $stmtEmail->close();
+    
+    
+        $mysqli->close();
+    
+        
+        return ($resultEmail->num_rows > 0 );
+    }
+
+    
+    private function insertUser($data) {
+        
+        $hashedPassword = password_hash($data['password'], PASSWORD_DEFAULT);
+        $admin = 0 ;
+        require_once('config.php');
+        $mysqli = new mysqli(DB_HOST, DB_USER, DB_PASSWORD, DB_NAME);
+
+        if ($mysqli->connect_error) {
+            die("Connection failed: " . $mysqli->connect_error);
+        }
+
+        $stmt = $mysqli->prepare("INSERT INTO user_account (First_Name, Last_Name, Email_Address, user_password, Date_of_Birth, Admin_privileges) VALUES (?, ?, ?, ?, ?, ?)");
+        $stmt->bind_param("sssssi", $data['name'], $data['surname'], $data['email'], $hashedPassword, $data['DOB'], $admin);
+        $success = $stmt->execute();
+        $stmt->close();
+        $mysqli->close();
+
+        return $success;
+    }
+
+    private function handleLogin($data) {
+        if (!isset($data['email']) || !isset($data['password'])) {
+            $this->sendResponse(400, "Bad Request - Email and password are required");
+            return;
+        }
+        require_once('config.php');
+    
+        $mysqli = new mysqli(DB_HOST, DB_USER, DB_PASSWORD, DB_NAME);
+        $stmt = $mysqli->prepare("SELECT User_ID, user_password FROM user_account WHERE Email_Address = ?");
+        $stmt->bind_param("s", $data['email']);
         $stmt->execute();
         $result = $stmt->get_result();
-        if ($result->num_rows > 0) {
-            return json_encode(['status' => 'error', 'message' => 'User already exists']);
+    
+        if ($result->num_rows !== 1) {
+            $this->sendResponse(401, "Unauthorized access - Incorrect email or password");
+            return;
         }
     
-        // Hash the password
-        $hashed_password = password_hash($password, PASSWORD_DEFAULT);
-    
-        // Insert the new user into the database
-        $stmt = $mysqli->prepare("INSERT INTO User_Account (First_Name, Last_Name, Email_Address, User_Password, Date_of_Birth, Admin_Privileges) VALUES (?, ?, ?, ?, ?, ?)");
-        if ($stmt === false) {
-            die('prepare() failed: ' . htmlspecialchars($mysqli->error));
+        $row = $result->fetch_assoc();
+        if (!password_verify($data['password'], $row['user_password']) && $data['password'] !== $row['user_password']) {
+            $this->sendResponse(401, "Unauthorized access - Incorrect email / password");
+            return;
+
         }
-        $stmt->bind_param("sssssi", $firstName, $lastName, $email, $hashed_password, $dateOfBirth, $adminPrivileges);
-        if ($stmt->execute() === false) {
-            die('execute() failed: ' . htmlspecialchars($stmt->error));
-        }
+        
     
-        // Get the ID of the newly created user
-        $userID = $mysqli->insert_id;
+
+        $user_id = $row['User_ID'];
+        setcookie("user_id", $user_id, time() + (86400 * 30), "/");
     
-        // Prepare the success message
-        $message = $adminPrivileges ? 'Admin successfully created' : 'User successfully created';
-        return json_encode(['status' => 'success', 'timestamp' => round(microtime(true) * 1000), 'data' => ["User_ID" => $userID, "Email" => $email, "First_Name" => $firstName, "message" => $message]]);
+        $stmt->close();
+        $mysqli->close();
+    
+        $this->sendResponse(200, "Success" , $user_id );
     }
-  
-    
-  
-    public function searchMovieTitles($title) {
-        global $mysqli;
+
+
+    public function getDetails($data) {
+        if (!isset($data['title_ID']) ) {
+            $this->sendResponse(400, "Bad Request - Email and password are required");
+            return;
+        }
+        require_once('config.php');
     
         // Prepare the SQL statement
-        $stmt = $mysqli->prepare("SELECT Title_ID, Title_Name FROM title WHERE Title_Name LIKE ?");
-        if ($stmt === false) {
-            die('prepare() failed: ' . htmlspecialchars($mysqli->error));
-        }
-    
-        // Bind the title parameter
-        $title = '%' . $title . '%';
-        $stmt->bind_param("s", $title);
-    
-        $stmt->execute();
-        $result = $stmt->get_result();
-    
-        // Fetch all the matching titles
-        $titles = $result->fetch_all(MYSQLI_ASSOC);
-    
-        return json_encode(['status' => 'success', 'data' => $titles]);
-    }
-    
-
-   
-  
-    public function hashExistingPasswords() {
-        global $mysqli;
-    
-        // Select users where User_ID is between 364 and 665
-        $stmt = $mysqli->prepare("SELECT * FROM User_Account WHERE User_ID BETWEEN 999 AND 1005");
-        if ($stmt === false) {
-            die('prepare() failed: ' . htmlspecialchars($mysqli->error));
-        }
-        $stmt->execute();
-        $result = $stmt->get_result();
-    
-        // Loop through each user
-        while ($user = $result->fetch_assoc()) {
-            // Hash the password
-            $hashed_password = password_hash($user['User_Password'], PASSWORD_DEFAULT);
-    
-            // Update the user's password in the database
-            $stmt = $mysqli->prepare("UPDATE User_Account SET User_Password = ? WHERE User_ID = ?");
-            if ($stmt === false) {
-                die('prepare() failed: ' . htmlspecialchars($mysqli->error));
-            }
-            $stmt->bind_param("si", $hashed_password, $user['User_ID']);
-            if ($stmt->execute() === false) {
-                die('execute() failed: ' . htmlspecialchars($stmt->error));
-            }
-        }
-    
-        return json_encode(['status' => 'success', 'message' => 'Passwords for users 364 to 665 have been hashed']);
-    }
-
- 
-   
-    
-    public function getDetails($titleId) {
-        global $mysqli;
-    
-        // Prepare the SQL statement
+        
+        $mysqli = new mysqli(DB_HOST, DB_USER, DB_PASSWORD, DB_NAME);
         $stmt = $mysqli->prepare("SELECT Title_ID, Title_Name, IFNULL(Content_Rating_ID, 0) AS Content_Rating_ID, Review_Rating, Release_Date, Plot_Summary, Crew, Image, IFNULL(Language_ID, 0) AS Language_ID FROM title WHERE Title_ID = ?");
         if ($stmt === false) {
             die('prepare() failed: ' . htmlspecialchars($mysqli->error));
@@ -163,136 +305,368 @@ class API {
     
         // Replace the Content_Rating_ID with the Rating in the movie details
         $movieDetails['Content_Rating_ID'] = $contentRating['Rating'];
+
+        $stmt->close();
+        $mysqli->close();
     
-        return json_encode(['status' => 'success', 'data' => $movieDetails], JSON_UNESCAPED_SLASHES);
+        $this->sendResponse(200, "Success" , $movieDetails );
     }
-    
-    
 
 
-
-    public function login($email, $password) {
-        global $mysqli;
     
-        // Prepare the SQL statement to prevent SQL injection
-        $stmt = $mysqli->prepare("SELECT * FROM User_Account WHERE Email_Address = ?");
-        if (!$stmt) {
-            return json_encode(['status' => 'error', 'message' => 'Database error: ' . $mysqli->error]);
+   
+    
+    function handleGetSeries($data) {
+        if (empty($data)) {
+            $this->sendResponse(400 ,"Post parameters are missing");
+            return;
         }
     
-        // Bind the email parameter
+        if (!$this->validateLimit($data['limit'])) {
+            $this->sendResponse(400, "Bad Request - Invalid 'limit' parameter");
+            return;
+        }
     
-        $stmt->bind_param("s", $email);
+        if (!$this->validateSort($data['sort'])) {
+            $this->sendResponse(400, "Bad Request - Invalid 'sort' parameter");
+            return;
+        }
+    
+        if (!$this->validateOrder($data['order'])) {
+            $this->sendResponse(400, "Bad Request - Invalid 'order' parameter");
+            return;
+        }
+    
+        if (!$this->validateFuzzy($data['fuzzy'])) {
+            $this->sendResponse(400, "Bad Request - Invalid 'fuzzy' parameter");
+            return;
+        }
+    
+        if (!$this->validateSearch($data['search'])) {
+            $this->sendResponse(400, "Bad Request - Invalid 'search' parameter");
+            return;
+        }
+    
+        if ( !isset($data['return'])) {
+            $this->sendResponse(400, "Bad Request - Missing required parameters");
+            return;
+        }
+    
+        $sql = "SELECT ";
+        if ( $data['return'] === "*") {
+            $sql .= "*";
+        } else {
+            $sql .= implode(', ', $data['return']);
+        }
+        $sql .= " FROM series s INNER JOIN title t ON s.Title_ID = t.Title_ID";
+    
+        if (isset($data['search']) && !empty($data['search']) && $data['fuzzy'] == false) {
+            $sql .= " WHERE ";
+            $searchConditions = [];
+            foreach ($data['search'] as $column => $value) {
+                $searchConditions[] = "$column = '$value'";
+            }
+            $sql .= implode(" AND ", $searchConditions);
+        }
+    
+        if (isset($data['search']) && !empty($data['search']) && $data['fuzzy'] == true) {
+            $sql .= " WHERE ";
+            $searchConditions = [];
+            foreach ($data['search'] as $column => $value) {
+                $searchConditions[] = "$column LIKE '%$value%'";
+            }
+            $sql .= implode(" AND ", $searchConditions);
+        }
+    
+        if (isset($data['sort']) && !isset($data['order'])) {
+            if(is_array($data['sort'])){
+                $ordbydata = implode(', ', $data['sort']);
+            }else{
+                $ordbydata = $data['sort'];
+            }
+            
+            $sql .= " ORDER BY $ordbydata ";
+        }
+        
+        if (isset($data['sort']) && isset($data['order'])) {
+            if(is_array($data['sort'])){
+                $ordbydata = implode(', ', $data['sort']);
+            }else{
+                $ordbydata = $data['sort'];
+            }
+            $sql .= " ORDER BY $ordbydata {$data['order']}";
+        }
+    
+        if (isset($data['limit'])) {
+            $sql .= " LIMIT ?";
+        }
+    
+        require_once('config.php');
+        $mysqli = new mysqli(DB_HOST, DB_USER, DB_PASSWORD, DB_NAME);
+        $stmt = $mysqli->prepare($sql);
+    
+        if (!$stmt) {
+            $this->sendResponse(500, "Internal Server Error - Failed to prepare SQL statement $sql");
+            return;
+        }
+    
+        if (isset($data['limit'])) {
+            $stmt->bind_param("i", $data['limit']);
+        }
+    
+        $stmt->execute();
+    
+        $result = $stmt->get_result();
+        $series = $result->fetch_all(MYSQLI_ASSOC);
+    
+        $stmt->close();
+        $mysqli->close();
+    
+        $seriesWithImages = [];
+        foreach ($series as $serie) {
+            $imageUrls = $this->fetchImage($serie['Title_ID']);
+            $serie['image'] = $imageUrls;
+            $seriesWithImages[] = $serie;
+        }
+    
+        $this->sendResponse(200, "Success", $seriesWithImages);
+    }
+    
+ 
+
+
+
+    private function handleGetMovies($data) {
+
+        if (empty($data)) {
+            $this->sendResponse(400 ,"Post parameters are missing");
+            return;
+        }
+        
+    
+
+        
+        if (!$this->validateLimit($data['limit'])) {
+            $this->sendResponse(400, "Bad Request - Invalid 'limit' parameter");
+            return;
+        }
+
+        if (!$this->validateSort($data['sort'])) {
+            $this->sendResponse(400, "Bad Request - Invalid 'sort' parameter");
+            return;
+        }
+
+        if (!$this->validateOrder($data['order'])) {
+            $this->sendResponse(400, "Bad Request - Invalid 'order' parameter");
+            return;
+        }
+
+      
+
+        if (!$this->validateFuzzy($data['fuzzy'])) {
+            $this->sendResponse(400, "Bad Request - Invalid 'fuzzy' parameter");
+            return;
+        }
+
+        if (!$this->validateSearch($data['search'])) {
+            $this->sendResponse(400, "Bad Request - Invalid 'search' parameter");
+            return;
+        }
+
+        if ( !isset($data['return'])) {
+            $this->sendResponse(400, "Bad Request - Missing required parameters");
+            return;
+        }
+        
+        $sql = "SELECT ";
+        if ( $data['return'] === "*") {
+            $sql .= "*";
+        } else {
+            $sql .= implode(', ', $data['return']);
+        }
+        $sql .= " FROM title";
+    
+        
+        if (isset($data['search']) && !empty($data['search']) && $data['fuzzy'] == false) {
+            $sql .= " WHERE ";
+            $searchConditions = [];
+            foreach ($data['search'] as $column => $value) {
+                $searchConditions[] = "$column = '$value'";
+            }
+            $sql .= implode(" AND ", $searchConditions);
+        }
+    
+        if (isset($data['search']) && !empty($data['search']) && $data['fuzzy'] == true) {
+            $sql .= " WHERE ";
+            $searchConditions = [];
+            foreach ($data['search'] as $column => $value) {
+                $searchConditions[] = "$column LIKE '%$value%'";
+            }
+            $sql .= implode(" AND ", $searchConditions);
+        }
+    
+        if (isset($data['sort']) && !isset($data['order'])) {
+            if(is_array($data['sort'])){
+                $ordbydata = implode(', ', $data['sort']);
+            }else{
+                $ordbydata = $data['sort'];
+            }
+            
+            $sql .= " ORDER BY $ordbydata ";
+        }
+        
+        if (isset($data['sort']) && isset($data['order'])) {
+            if(is_array($data['sort'])){
+                $ordbydata = implode(', ', $data['sort']);
+            }else{
+                $ordbydata = $data['sort'];
+            }
+            $sql .= " ORDER BY $ordbydata {$data['order']}";
+        }
+    
+        
+        if (isset($data['limit'])) {
+            $sql .= " LIMIT ?";
+        }
+    
+        
+        require_once('config.php');
+        $mysqli = new mysqli(DB_HOST, DB_USER, DB_PASSWORD, DB_NAME);
+        $stmt = $mysqli->prepare($sql);
+    
+        if (!$stmt) {
+            $this->sendResponse(500, "Internal Server Error - Failed to prepare SQL statement $sql");
+            return;
+        }
+    
+        
+
+        if (isset($data['limit'])) {
+            $stmt->bind_param("i", $data['limit']);
+        }
+    
+        
+        $stmt->execute();
+    
+        
+        $result = $stmt->get_result();
+        $Movies = $result->fetch_all(MYSQLI_ASSOC);
+    
+        
+        $stmt->close();
+        $mysqli->close();
+    
+        $MoviesWithImages = [];
+    foreach ($Movies as $Movie) {
+        $imageUrls = $this->fetchImage($Movie['Title_ID']);
+        $Movie['image'] = $imageUrls;
+        $MoviesWithImages[] = $Movie;
+    }
+    
+        
+
+        
+        $this->sendResponse(200, "Success", $MoviesWithImages);
+    }
+    
+    private function fetchImage($titleid) {
+        require_once('config.php');
+        $mysqli = new mysqli(DB_HOST, DB_USER, DB_PASSWORD, DB_NAME);
+        $stmt = $mysqli->prepare("SELECT Image FROM title WHERE Title_ID = ?");
+        $stmt->bind_param("i", $titleid);
         $stmt->execute();
         $result = $stmt->get_result();
     
-        // Check if the user exists
-        if ($result->num_rows > 0) {
-            $user = $result->fetch_assoc();
-    
-            // Verify the password
-            if (password_verify($password, $user['User_Password'])) {
-                // Remove the password from the user data
-                unset($user['User_Password']);
-    
-                return json_encode([
-                    "status" => "success",
-                    "timestamp" => round(microtime(true) * 1000),
-                    "data" => [$user]
-                ]);
-            } else {
-                return json_encode(['status' => 'error', 'message' => 'Invalid password']);
-            }
-        } else {
-            return json_encode(['status' => 'error', 'message' => 'User does not exist']);
+        if ($result->num_rows !== 1) {
+            $this->sendResponse(401, "Unauthorized access - Incorrect email or password");
+            return;
         }
+    
+        $row = $result->fetch_assoc();
+        
+        $imageUrl = $row['Image'];
+    
+        $curl = curl_init();
+    
+        curl_setopt_array($curl, [
+            CURLOPT_URL => $imageUrl,
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_HEADER => false,
+            CURLOPT_FOLLOWLOCATION => true,
+            CURLOPT_MAXREDIRS => 10,
+            CURLOPT_TIMEOUT => 30,
+            CURLOPT_SSL_VERIFYPEER => false, 
+            CURLOPT_SSL_VERIFYHOST => false, 
+        ]);
+    
+        $response = curl_exec($curl);
+    
+        if (curl_errno($curl)) {
+            $error = curl_error($curl);
+            
+        }
+    
+        
+        curl_close($curl);
+    
+        
+        $imageUrls = json_decode($response, true);
+    
+        
+        return $imageUrls;
     }
+
+
+    private function validateLimit($limit) {
+        
+        return !isset($limit) || is_numeric($limit) && $limit > 0 && $limit < 500;
+    }
+    
+    private function validateSort($sort) {
+        
+        $allowedSortOptions = ['Title_ID', 'Title_Name', 'Content_Rating_ID', 'Review_Rating', 'Release_Date', 'Plot_Summary', 'Language_ID'];
+    
+        return !isset($limit) || in_array($sort, $allowedSortOptions);
+    }
+    
+    private function validateOrder($order) {
+        
+        return !isset($limit) || in_array($order, ['ASC', 'DESC']);
+    }
+    
+    private function validateFuzzy($fuzzy) {
+        return !isset($limit) || is_bool($fuzzy);
+    }
+
+
+    
+    private function validateSearch($search) {
+
+        
+        if ($search === null) {
+            return true; 
+        }
+    
+        
+        $allowedColumns = ['Title_ID', 'Title_Name', 'Content_Rating_ID', 'Review_Rating', 'Release_Date', 'Plot_Summary', 'Language_ID'];
+    
+        
+        foreach ($search as $column => $value) {
+            if (!in_array($column, $allowedColumns)) {
+                return false; 
+            }
+        }
+    
+    
+        return true; 
+    }
+
 }
 
 
-$api = new API();
-$data = json_decode(file_get_contents('php://input'), true);
-if ($data['type'] == 'Register') {
-    $adminPrivileges = isset($data['Admin_Privileges']) ? $data['Admin_Privileges'] : 0;  // Use 0 as the default value
-    echo $api->register($data['First_Name'], $data['Last_Name'], $data['Email_Address'], $data['User_Password'], $data['Date_of_Birth'], $adminPrivileges);
-} elseif ($data['type'] == 'Login') {
-    echo $api->login($data['Email_Address'], $data['User_Password']);
-} elseif ($data['type'] == 'HashPasswords') {
-    echo $api->hashExistingPasswords();
-} elseif ($data['type'] == 'SearchTitles') {
-    echo $api->searchMovieTitles($data['Title_Name']);
-} elseif ($data['type'] == 'GetDetails') {
-    echo $api->getDetails($data['Title_ID']);
-}
-
+$api = API::getInstance();
+$api->handleRequest();
 
 
 
 ?>
-
-<!--  
---------------------------------
-    For Register:
---------------------------------
-    {
-    "type": "Register",
-    "First_Name": "John",
-    "Last_Name": "Doe",
-    "Email_Address": "john.doe@example.com",
-    "User_Password": "SecurePassword123!",
-    "Date_of_Birth": "1990-01-01",
-    "Admin_Privileges": 0
-} -->
-
-
-<!-- 
---------------------------------
-    For Login:
---------------------------------
-
-
-{
-    "type": "Login",
-    "Email_Address": "john.doe@example.com",
-    "User_Password": "SecurePassword123!"
-} -->
-
-
-<!-- 
-Added an function to hash all the existing passwords in the database,
- but since wheatley is ratelimited you must go change the,
- Between 0 and 365 in increaments of 350. 
- so The next one will be 350 to 700 and so on.
-----------------------------------------------------------------
-    For HashPasswords:    NB!!!!! 
-    ONLY RUN THIS ONCE 
-    WE WILL REMOVE AFTER EVENONE HASHED THEIR PASSWORDS 
-----------------------------------------------------------------
-{
-    "type": "HashPasswords"
-} -->
-
-
-<!-- 
-    Search now implemented not sure what it must return? 
-    I just returned the Title_ID and Title_Name    
-    with fuzzy search so no need to do recommended search
-{
-    "type": "SearchTitles",
-    "Title_Name": "Attack"
-} -->
-
-
-
-<!-- 
-    HERE IS THE MOST IMPORTANT ONE
-    GetDetails
-    It's for the pop up. So when you click on a movie it will show the details
-    how we could implement this is js I think when we click on the movie pic
-    it adds the Title_ID in the url and then when we load to the info page we pull that id
-    Else we can do that in a cookie but I think it will be a cluster fuck.
-    NB!!!! THIS ONLY RETURNS ALL THE FIELDS THUS FAR IN THE title tb but we will add the other sql q soon.
-{
-    "type": "GetDetails",
-    "Title_ID": 1
-} -->
