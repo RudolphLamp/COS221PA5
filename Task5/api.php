@@ -42,7 +42,9 @@ class API {
             case 'Login':
                 $this->handleLogin($data);
                 break;
-            
+            case 'GetDetails':
+                $this->getDetails($data);
+                break;
             case 'SavePreferences':
                 $this->handleSavePreferences($data);
                 break;
@@ -246,75 +248,6 @@ class API {
     }
 
 
-    public function getDetails($data) {
-        if (!isset($data['title_ID']) ) {
-            $this->sendResponse(400, "Bad Request - Email and password are required");
-            return;
-        }
-        require_once('config.php');
-    
-        // Prepare the SQL statement
-        
-        $mysqli = new mysqli(DB_HOST, DB_USER, DB_PASSWORD, DB_NAME);
-        $stmt = $mysqli->prepare("SELECT Title_ID, Title_Name, IFNULL(Content_Rating_ID, 0) AS Content_Rating_ID, Review_Rating, Release_Date, Plot_Summary, Crew, Image, IFNULL(Language_ID, 0) AS Language_ID FROM title WHERE Title_ID = ?");
-        if ($stmt === false) {
-            die('prepare() failed: ' . htmlspecialchars($mysqli->error));
-        }
-    
-        // Bind the titleId parameter
-        $stmt->bind_param("i", $titleId);
-    
-        $stmt->execute();
-        $result = $stmt->get_result();
-    
-        // Fetch the movie details
-        $movieDetails = $result->fetch_assoc();
-    
-        // Get the language name
-        $stmt = $mysqli->prepare("SELECT Language_Name FROM available_language WHERE Language_ID = ?");
-        if ($stmt === false) {
-            die('prepare() failed: ' . htmlspecialchars($mysqli->error));
-        }
-    
-        // Bind the languageId parameter
-        $stmt->bind_param("i", $movieDetails['Language_ID']);
-    
-        $stmt->execute();
-        $result = $stmt->get_result();
-    
-        // Fetch the language name
-        $language = $result->fetch_assoc();
-    
-        // Replace the Language_ID with the Language_Name in the movie details
-        $movieDetails['Language_ID'] = $language['Language_Name'];
-    
-        // Get the content rating
-        $stmt = $mysqli->prepare("SELECT Rating FROM content_rating WHERE Content_Rating_ID = ?");
-        if ($stmt === false) {
-            die('prepare() failed: ' . htmlspecialchars($mysqli->error));
-        }
-    
-        // Bind the contentRatingId parameter
-        $stmt->bind_param("i", $movieDetails['Content_Rating_ID']);
-    
-        $stmt->execute();
-        $result = $stmt->get_result();
-    
-        // Fetch the content rating
-        $contentRating = $result->fetch_assoc();
-    
-        // Replace the Content_Rating_ID with the Rating in the movie details
-        $movieDetails['Content_Rating_ID'] = $contentRating['Rating'];
-
-        $stmt->close();
-        $mysqli->close();
-    
-        $this->sendResponse(200, "Success" , $movieDetails );
-    }
-
-
-    
-   
     
     function handleGetSeries($data) {
         if (empty($data)) {
@@ -431,6 +364,62 @@ class API {
     
         $this->sendResponse(200, "Success", $seriesWithImages);
     }
+
+    
+    public function getDetails($data) {
+        if (!isset($data['title_ID'])) {
+            $this->sendResponse(400, "Bad Request - Title ID is required");
+            return;
+        }
+
+        require_once('config.php');
+
+        $mysqli = new mysqli(DB_HOST, DB_USER, DB_PASSWORD, DB_NAME);
+
+        // Fetch the movie details
+        $stmt = $mysqli->prepare("SELECT Title_ID, Title_Name, IFNULL(Content_Rating_ID, 0) AS Content_Rating_ID, Review_Rating, Release_Date, Plot_Summary, Crew, Image, IFNULL(Language_ID, 0) AS Language_ID FROM title WHERE Title_ID = ?");
+        if (!$stmt) {
+            $this->sendResponse(500, "Internal Server Error - Failed to prepare SQL statement");
+            return;
+        }
+
+        $stmt->bind_param("i", $data['title_ID']);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        $movieDetails = $result->fetch_assoc();
+
+        // Fetch the language name
+        $stmt = $mysqli->prepare("SELECT Language_Name FROM available_language WHERE Language_ID = ?");
+        if (!$stmt) {
+            $this->sendResponse(500, "Internal Server Error - Failed to prepare SQL statement");
+            return;
+        }
+
+        $stmt->bind_param("i", $movieDetails['Language_ID']);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        $language = $result->fetch_assoc();
+        $movieDetails['Language_ID'] = $language['Language_Name'];
+
+        // Fetch the content rating
+        $stmt = $mysqli->prepare("SELECT Rating FROM content_rating WHERE Content_Rating_ID = ?");
+        if (!$stmt) {
+            $this->sendResponse(500, "Internal Server Error - Failed to prepare SQL statement");
+            return;
+        }
+
+        $stmt->bind_param("i", $movieDetails['Content_Rating_ID']);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        $contentRating = $result->fetch_assoc();
+        $movieDetails['Content_Rating_ID'] = $contentRating['Rating'];
+
+        $stmt->close();
+        $mysqli->close();
+
+        $this->sendResponse(200, "Success", $movieDetails);
+    }
+
     
  
 
