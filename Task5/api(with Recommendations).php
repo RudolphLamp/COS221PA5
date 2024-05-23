@@ -409,9 +409,6 @@ class API {
             }
             $sql .= " ORDER BY $ordbydata {$data['order']}";
         }
-
-        
-    
         
         if (isset($data['limit'])) {
             $sql .= " LIMIT ?";
@@ -426,20 +423,14 @@ class API {
             $this->sendResponse(500, "Internal Server Error - Failed to prepare SQL statement $sql");
             return;
         }
-    
-        
-
         if (isset($data['limit'])) {
             $stmt->bind_param("i", $data['limit']);
         }
     
-        
         $stmt->execute();
-    
         
         $result = $stmt->get_result();
         $Movies = $result->fetch_all(MYSQLI_ASSOC);
-    
         
         $stmt->close();
         $mysqli->close();
@@ -463,9 +454,6 @@ class API {
             $this->sendResponse(400 ,"Post parameters are missing");
             return;
         }
-        
-    
-
         
         if (!$this->validateLimit($data['limit'])) {
             $this->sendResponse(400, "Bad Request - Invalid 'limit' parameter");
@@ -904,9 +892,5 @@ POST |https://wheatley.cs.up.ac.za/PATH TO THE API
 }
 
 */
-
-
-
-
 
 ?>
