@@ -22,7 +22,6 @@ Admin users have the ability to manage content and user data, while normal users
 
 ## Installation
 
-Provide step-by-step instructions on how to install and set up your project. For example:
 Installation
 To run the project locally, you need to install XAMPP as it includes phpMyAdmin, which is required for hosting our database.
 
