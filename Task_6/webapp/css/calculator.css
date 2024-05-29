@@ -5,14 +5,12 @@ body {
     
   }
 
-  body.dark-mode {
-    background-color: black;
+  * {
+    box-sizing: border-box;
   }
 
-  .loader {
-    display: block;
-    margin-left: auto;
-    margin-right: auto;
+  body.dark-mode {
+    background-color: black;
   }
 
   @font-face {
@@ -31,6 +29,8 @@ body {
    
     
   }
+
+
   
   .navbar {
     display: flex;
@@ -56,6 +56,15 @@ body {
     background-color: rgb(223, 196, 75);
     color: black;
   }
+
+  input[type=number] {
+    padding: 6px;
+    margin-top: 9px;
+    margin-bottom: 9px;
+    margin-left: 150px;
+    font-size: 15px;
+    border: 1px solid #000000;
+  }
   
 
   @media screen and (max-width: 600px) {
@@ -78,50 +87,25 @@ body {
     
   }
 
-.allagents {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: space-around;
-    padding: 20px;
-  }
-  
-  
-  .singleagent {
-    width: 300px;
-    margin-bottom: 20px;
-    border: 0.5px solid black;
-    box-shadow: 1px 10px 15px rgba(0, 0, 0, 0.1);
-    border-radius: 5px;
-    overflow: hidden;
-    background-color:  white ;
-  }
 
-  .singleagent.dark-mode {
-    width: 300px;
-    margin-bottom: 20px;
-    border: 0.5px solid rgb(223, 196, 75);
-    box-shadow: 1px 10px 15px rgb(223, 196, 75);
-    border-radius: 5px;
-    overflow: hidden;
-    background-color: black ;
+  
+  .column {
+    float: left;
+    width: 600px;
+    padding: 10px;
+    height: 800px;
+    border: 0.5px solid black;
   }
   
-  
-  .singleagent img {
-    width: 100%;
-    height: auto;
+  .row:after {
+    content: "";
+    display: table;
+    clear: both;
   }
   
   .details {
     font-family: 'Monseratt' , 'serif';
     padding: 10px;
-
-  }
-
-  .details.dark-mode {
-    font-family: 'Monseratt' , 'serif';
-    padding: 10px;
-    color: white;
   }
   
   .details h2 {
@@ -129,18 +113,14 @@ body {
     color: #333;
   }
 
-  .details.dark-mode h2 {
-    font-family: 'Playfair' , 'serif';
-    color: rgb(223, 196, 75);
-  }
+  .calcbtn {
+    font-family:'Monseratt' , Arial, Helvetica, sans-serif;
+    background-color: black;
+    color: white;
+    padding: 16px;
+    font-size: 16px;
+    border: none;
 
-  .loader {
-    display: block;
-    height: 500px;
-    width:500px;
-    margin-top: auto;
-    margin-left: auto;
-    margin-right: auto;
   }
 
   button {
