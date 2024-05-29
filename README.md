@@ -22,8 +22,11 @@ Admin users have the ability to manage content and user data, while normal users
 
 ## Installation
 
-Installation
-To run the project locally, you need to install XAMPP as it includes phpMyAdmin, which is required for hosting our database.
+Installations and requirements
+To run the project, you need to have a web browser installed as it use phpMyAdmin on wheatly aswell as the web app is ran on wheatly, a registered username and password is required to accsess the web app.
+
+If you want to run it locally a few extra steps are required.
+You need to install XAMPP and change the file paths to use the files on your local machine in your specified XAMPP execution folder .
 
 **1:** Install XAMPP:
 
@@ -47,6 +50,9 @@ Copy the website files (Task5/final dir) to the htdocs directory of your XAMPP i
 **4:** Configure the API:
 
 Navigate to the directory where you copied the website files.
+Open all the files in a code editor like VS CODE.
+Update all the file paths to your specific XAMPP file where the downloaded files are stored.
+You need to specify the exact paths for each file.
 Open the config.php file located in the api directory.
 Update the database connection settings in api.php to match your local phpMyAdmin database configuration.
 
