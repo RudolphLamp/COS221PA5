@@ -25,17 +25,17 @@ Admin users have the ability to manage content and user data, while normal users
 Installation
 To run the project locally, you need to install XAMPP as it includes phpMyAdmin, which is required for hosting our database.
 
-**1** Install XAMPP:
+**1:** Install XAMPP:
 
 Download and install XAMPP from https://www.apachefriends.org/index.html.
 Start the Apache and MySQL modules in the XAMPP Control Panel.
 
-**2** Set up phpMyAdmin:
+**2:** Set up phpMyAdmin:
 
 Open your browser and go to http://localhost/phpmyadmin.
 Create a new database for the project.
 
-**3** Copy Website Files:
+**3:** Copy Website Files:
 
 Clone the repository:
 ```bash
@@ -43,7 +43,7 @@ git clone https://github.com/RudolphLamp/COS221PA5.git
 ```
 Copy the website files to the htdocs directory of your XAMPP installation (usually located at C:\xampp\htdocs on Windows).
 
-**4** Configure the API:
+**4:** Configure the API:
 
 Navigate to the directory where you copied the website files.
 Open the config.php file located in the api directory.
