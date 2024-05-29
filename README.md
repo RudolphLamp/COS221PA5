@@ -38,11 +38,11 @@ Create a new database for the project.
 **3:** Copy Website Files:
 
 Clone the repository:
-```bash
+```sh
 git clone https://github.com/RudolphLamp/COS221PA5.git
-Then copy over all the data from the Task5/final dir to your htdocs in XAMPP
 ```
-Copy the website files to the htdocs directory of your XAMPP installation (usually located at C:\xampp\htdocs on Windows).
+
+Copy the website files (Task5/final dir) to the htdocs directory of your XAMPP installation (usually located at C:\xampp\htdocs on Windows).
 
 **4:** Configure the API:
 
