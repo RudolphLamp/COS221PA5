@@ -35,9 +35,21 @@ Start the Apache and MySQL modules in the XAMPP Control Panel.
 
 Open your browser and go to http://localhost/phpmyadmin.
 Create a new database for the project.
+
 **3** Copy Website Files:
 
 Clone the repository:
 ```bash
-python==3.11
+git clone https://github.com/RudolphLamp/COS221PA5.git
 ```
+Copy the website files to the htdocs directory of your XAMPP installation (usually located at C:\xampp\htdocs on Windows).
+
+**4** Configure the API:
+
+Navigate to the directory where you copied the website files.
+Open the config.php file located in the api directory.
+Update the database connection settings in api.php to match your local phpMyAdmin database configuration.
+
+**5** Run the Web Server:
+Start the Apache server from the XAMPP Control Panel.
+Open your browser and go to http://localhost/your-repo (replace your-repo with the directory name where you copied the website files).
