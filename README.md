@@ -53,3 +53,15 @@ Update the database connection settings in api.php to match your local phpMyAdmi
 **5** Run the Web Server:
 Start the Apache server from the XAMPP Control Panel.
 Open your browser and go to http://localhost/your-repo (replace your-repo with the directory name where you copied the website files).
+
+## Task Allocation
+
+| Student Number  | Name                           | Tasks         |
+|-----------------|--------------------------------|---------------|
+| U23536013       | Arnaud Zander Strydom          | Task 5,6,7    |
+| u22566202       | Zainab Abdulrasaq              | Task 1,2,4,5  |
+| u22636022       | Tshireletso Ramatsobane Sebake | Task 2,3      |
+| u21593681       | Samkelekile Ndevu              | Task 5,6      |
+| U19155853       | Christopher Katranas           | Task 2,4,6    |
+| u23528142       | Paballo Diyase                 | Task 1,2,4,5  |
+| u20598425       | Rudolph Lamprecht              | Task 5,6,8    |
