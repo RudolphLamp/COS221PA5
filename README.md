@@ -28,17 +28,17 @@ To run the project, you need to have a web browser installed as it uses phpMyAdm
 If you want to run it locally a few extra steps are required.
 You need to install XAMPP and change the file paths to use the files on your local machine in your specified XAMPP execution folder .
 
-**1:** Install XAMPP:
+**1.** Install XAMPP:
 
 Download and install XAMPP from https://www.apachefriends.org/index.html.
 Start the Apache and MySQL modules in the XAMPP Control Panel.
 
-**2:** Set up phpMyAdmin:
+**2.** Set up phpMyAdmin:
 
 Open your browser and go to http://localhost/phpmyadmin.
 Create a new database for the project.
 
-**3:** Copy Website Files:
+**3.** Copy Website Files:
 
 Clone the repository:
 ```sh
@@ -47,7 +47,7 @@ git clone https://github.com/RudolphLamp/COS221PA5.git
 
 Copy the website files (Task5/final dir) to the htdocs directory of your XAMPP installation (usually located at C:\xampp\htdocs on Windows).
 
-**4:** Configure the API:
+**4.** Configure the API:
 
 Navigate to the directory where you copied the website files.
 Open all the files in a code editor like VS CODE.
@@ -56,7 +56,7 @@ You need to specify the exact paths for each file.
 Open the config.php file located in the api directory.
 Update the database connection settings in api.php to match your local phpMyAdmin database configuration.
 
-**5** Run the Web Server:
+**5.** Run the Web Server:
 Start the Apache server from the XAMPP Control Panel.
 Open your browser and go to http://localhost/your-repo (replace your-repo with the directory name where you copied the website files).
 
