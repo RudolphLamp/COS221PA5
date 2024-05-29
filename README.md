@@ -23,7 +23,7 @@ Admin users have the ability to manage content and user data, while normal users
 ## Installation
 
 Installations and requirements
-To run the project, you need to have a web browser installed as it use phpMyAdmin on wheatly as well as the web app is ran on wheatly, a registered username and password is required to accsess the web app.
+To run the project, you need to have a web browser installed as it uses phpMyAdmin on Wheatly and the web app is also run on Wheatly. A registered username and password is required to accsess the web app.
 
 If you want to run it locally a few extra steps are required.
 You need to install XAMPP and change the file paths to use the files on your local machine in your specified XAMPP execution folder .
