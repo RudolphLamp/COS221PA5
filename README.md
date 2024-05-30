@@ -65,7 +65,7 @@ Open your browser and go to http://localhost/your-repo (replace your-repo with t
 | Student Number  | Name                           | Tasks           |
 |-----------------|--------------------------------|-----------------|
 | U23536013       | Arnaud Zander Strydom          | Task 5,6,7,8    |
-| u22566202       | Zainab Abdulrasaq              | Task 1,2,4,5    |
+| u22566202       | Zainab Abdulrasaq              | Task 2,4,5    |
 | u22636022       | Tshireletso Ramatsobane Sebake | Task 2,3        |
 | u21593681       | Samkelekile Ndevu              | Task 5,6        |
 | U19155853       | Christopher Katranas           | Task 2,4,6,8    |
